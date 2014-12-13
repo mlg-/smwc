@@ -27,7 +27,7 @@
 				<a href="TWITTERPLACEHOLDER"><img src="wp-content/themes/smwc_withlove/images/twitter.png"/></a>
 				<a href="FACEBOOKPLACEHOLDER"><img src="wp-content/themes/smwc_withlove/images/facebook.png"/></a>
 				<a href="INSTAGRAMPLACEHOLDER"><img src="wp-content/themes/smwc_withlove/images/instagram.png"/></a><br>
-				<?php get_search_form( $echo ); ?>			
+				<?php get_search_form(); ?>
 			</div>
 			<div class="main-navigation-logo">
 				<img src="wp-content/themes/smwc_withlove/images/smwc_t.png" alt="Southern Maine Workers' Center Logo"/>
@@ -44,6 +44,3 @@
 		</nav><!-- #site-navigation -->
 	</header><!-- #masthead -->
 
-
-
-	<div id="content" class="site-content">
