@@ -57,7 +57,7 @@ function smwc_withlove_setup() {
 	 * Switch default core markup for search form, comment form, and comments
 	 * to output valid HTML5.
 	 */
-	
+
 	add_theme_support( 'html5', array(
 		'search-form', 'comment-form', 'comment-list', 'gallery', 'caption',
 	) );
@@ -79,22 +79,47 @@ function smwc_withlove_setup() {
 endif; // smwc_withlove_setup
 add_action( 'after_setup_theme', 'smwc_withlove_setup' );
 
-/**
- * Register widget area.
- *
- * @link http://codex.wordpress.org/Function_Reference/register_sidebar
- */
-function smwc_withlove_widgets_init() {
-	register_sidebar( array(
-		'name'          => __( 'Sidebar', 'smwc_withlove' ),
-		'id'            => 'sidebar-1',
-		'description'   => '',
-		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-		'after_widget'  => '</aside>',
-		'before_title'  => '<h1 class="widget-title">',
-		'after_title'   => '</h1>',
-	) );
+if (function_exists('register_sidebar')) {
+
+    register_sidebar(array(
+        'name' => 'Left Column',
+        'id'   => 'left_column',
+        'description'   => 'Widget area for home page left column',
+        'before_widget' => '<div id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h4>',
+        'after_title'   => '</h4>'
+    ));
+    register_sidebar(array(
+        'name' => 'At a Glance Box',
+        'id'   => 'glance_box',
+        'description'   => 'Widget area for At a Glance Box',
+        'before_widget' => '',
+        'after_widget'  => '',
+        'before_title'  => '<h4>',
+        'after_title'   => '</h4>'
+    ));
+    register_sidebar(array(
+        'name' => 'Center Column',
+        'id'   => 'center_column',
+        'description'   => 'Widget area for home page center column',
+        'before_widget' => '<div id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h4>',
+        'after_title'   => '</h4>'
+    ));
+    register_sidebar(array(
+        'name' => 'Right Column',
+        'id'   => 'right_column',
+        'description'   => 'Widget area for home page right column',
+        'before_widget' => '<div id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h4>',
+        'after_title'   => '</h4>'
+    ));
+
 }
+
 add_action( 'widgets_init', 'smwc_withlove_widgets_init' );
 
 /**
