@@ -87,8 +87,8 @@ if (function_exists('register_sidebar')) {
         'description'   => 'Widget area for home page left column',
         'before_widget' => '<div id="%1$s" class="widget %2$s">',
         'after_widget'  => '</div>',
-        'before_title'  => '<h4>',
-        'after_title'   => '</h4>'
+        'before_title'  => '<h2>',
+        'after_title'   => '</h2>'
     ));
     register_sidebar(array(
         'name' => 'At a Glance Box',
@@ -96,8 +96,8 @@ if (function_exists('register_sidebar')) {
         'description'   => 'Widget area for At a Glance Box',
         'before_widget' => '',
         'after_widget'  => '',
-        'before_title'  => '<h4>',
-        'after_title'   => '</h4>'
+        'before_title'  => '<h2>',
+        'after_title'   => '</h2>'
     ));
     register_sidebar(array(
         'name' => 'Center Column',
@@ -105,8 +105,8 @@ if (function_exists('register_sidebar')) {
         'description'   => 'Widget area for home page center column',
         'before_widget' => '<div id="%1$s" class="widget %2$s">',
         'after_widget'  => '</div>',
-        'before_title'  => '<h4>',
-        'after_title'   => '</h4>'
+        'before_title'  => '<h2>',
+        'after_title'   => '</h2>'
     ));
     register_sidebar(array(
         'name' => 'Right Column',
@@ -114,8 +114,8 @@ if (function_exists('register_sidebar')) {
         'description'   => 'Widget area for home page right column',
         'before_widget' => '<div id="%1$s" class="widget %2$s">',
         'after_widget'  => '</div>',
-        'before_title'  => '<h4>',
-        'after_title'   => '</h4>'
+        'before_title'  => '<h2>',
+        'after_title'   => '</h2>'
     ));
 
 }
