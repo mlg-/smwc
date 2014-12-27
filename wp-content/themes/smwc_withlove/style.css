@@ -1,24 +1,12 @@
 /*
 Theme Name: smwc_withlove
-Theme URI: http://underscores.me/
-Author: Underscores.me
-Author URI: http://underscores.me/
-Description: Description
-Version: 1.0-wpcom
+Theme URI: http://www.maineworkers.org
+Author: Melissa Leigh Gore
+Author URI: http://www.mlg.codes
+Version: 1.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: smwc_withlove
-Tags:
-
-This theme, like WordPress, is licensed under the GPL.
-Use it to make something cool, have fun, and share what you've learned with others.
-
- smwc_withlove is based on Underscores http://underscores.me/, (C) 2012-2014 Automattic, Inc.
-
-Resetting and rebuilding styles have been helped along thanks to the fine work of
-Eric Meyer http://meyerweb.com/eric/tools/css/reset/index.html
-along with Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
-and Blueprint http://www.blueprintcss.org/
 */
 
 /*--------------------------------------------------------------
@@ -137,6 +125,11 @@ a:active {
 
 a img {
 	border: 0;
+}
+
+.clearfix {
+  overflow: auto;
+  zoom: 1;
 }
 
 /*--------------------------------------------------------------
@@ -446,21 +439,32 @@ a:active {
 /*--------------------------------------------------------------
 5.2 Menus
 --------------------------------------------------------------*/
+.site-header {
+	background-image: url('images/triangletexture.png');
+}
+
 .nav-container {
-	margin-top: 10px;
 	position:relative;
+	background-image: url('images/triangletexture.png');
+		min-height: 100px;
+
 }
 
 .social-and-search {
+	width: 200px;
 	text-align: center;
-	position:relative;
-	float:right;
-	margin-top: 30px;
-	margin-right: 20px;
+	margin-left: 75%;
+	padding-top: 20px;
 }
 
 .social-and-search a {
 	padding: 0 5px;
+}
+
+.social-and-search img {
+		border: 1px solid #ccc;
+		border-radius: 35%;
+
 }
 
 .social-and-search form {
@@ -529,11 +533,9 @@ a:active {
 .main-navigation-logo {
 	position:absolute;
 	top:0;
-	left:0;
-	padding-top: 12px;
-	padding-left: 20px;
-	height: 300px;
-	width: 286px;
+	left: 75px;
+	margin-left: 10px;
+	width: 250px;
 	z-index: 1
 }
 
@@ -542,16 +544,15 @@ a:active {
 }
 
 .main-navigation ul {
-	border-top: #be1e23 3px solid;
-	border-bottom: #be1e23 3px solid;
 	background-color: #4F4F4F;
 	width:100%;
-	height: 50px;
+	height: 55px;
 	list-style: none;
 	margin: 0;
 	padding-left: 340px;
 	position:absolute;
-	top: 116px;
+	top: 100px;
+	line-height: 1.9;
 }
 
 .main-navigation li {
@@ -562,6 +563,22 @@ a:active {
 	position: relative;
 	padding: 6px 10px 0;
 }
+
+.main-navigation li .dropdownTriangle {
+    background: none repeat scroll 0 0 transparent;
+    border-bottom: 15px solid black;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    bottom: 0;
+    display: none;
+    height: 0;
+    left: 50%;
+    margin-bottom: -1px;
+    margin-left: -15px;
+    position: absolute;
+    visibility: hidden;
+    width: 0;
+   }
 
 .main-navigation a {
 	color: white;
@@ -574,7 +591,7 @@ a:active {
 	box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
 	float: left;
 	position: absolute;
-	top: 1.5em;
+	top: 1.8em;
 	left: -999em;
 	z-index: 99999;
 }
@@ -593,15 +610,19 @@ a:active {
 }
 
 .main-navigation li:hover > a {
+	border: none;
 }
 
 .main-navigation ul ul :hover > a {
+	border: none;
 }
 
 .main-navigation ul ul a:hover {
+	border: none;
 }
 
 .main-navigation ul li:hover > ul {
+	border: none;
 	left: auto;
 }
 
@@ -612,7 +633,42 @@ a:active {
 .main-navigation .current_page_item > a,
 .main-navigation .current-menu-item > a,
 .main-navigation .current_page_ancestor > a {
+		background-color: #9b242d;
+		padding: 0 2px;
+
 }
+
+ul.sub-menu {
+	opacity: 0.90;
+	display: block;
+	left: 0px;
+	padding-left: 0px;
+	list-style: outside none none;
+	float: left;
+	margin-top: 5px;
+	border: 1px solid red;
+}
+
+ul.sub-menu li:first {
+	margin-top: 25px;
+	width: 0; 
+	height: 0; 
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	
+	border-bottom: 5px solid black;
+}
+
+ul.sub-menu ul {
+}
+
+ul.sub-menu li {
+	font-size: 16px;
+	text-transform: none;
+	background-color: #4F4F4F;
+}
+
+
 
 /* Small menu */
 .menu-toggle {
@@ -631,24 +687,25 @@ a:active {
 }
 
 .tagline-box {
-	width:100%;
-	height: 90px;
-	position:relative;
-	top: 160px;
 	background-color: white;
+	width:100%;
+	height: 65px;
+	position:relative;
+	top: 38px;
 }
 
 .tagline h1 {
 	clear: none;
-	font-size: 60px;
-	color: #C13F46;
+	font-size: 50px;
+	color: #9b242d;
 	text-align: center;
-	padding-left: 200px;
+	margin-left: 296px;
+	width: 800px;
 }
 
 .content-area {
 	position: relative;
-	margin-top:150px;
+	margin-top: 45px;
 }
 
 .site-main .comment-navigation,
@@ -784,7 +841,6 @@ a:active {
 }
 
 .hentry {
-	margin: 0 0 1.5em;
 }
 
 .byline,
@@ -800,13 +856,129 @@ a:active {
 .page-content,
 .entry-content,
 .entry-summary {
-	margin: 1.5em 0 0;
 }
 
 .page-links {
 	clear: both;
 	margin: 0 0 1.5em;
 }
+
+h1.entry-title {
+	color: #D12636;
+	font-size: 40px;
+	text-align: center;
+	border-bottom: 1px solid #ccc;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+	clear: none;
+}
+
+ul.sidebar-items {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+ 
+li.sidebar-items {
+  font: 200 20px;
+  border-bottom: 1px solid #ccc;
+}
+ 
+ 
+.sidebar-items li a {
+  text-decoration: none;
+  color: #000;
+  display: block;
+  width: 210px;
+ 
+  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
+  transition: font-size 0.3s ease, background-color 0.3s ease;
+}
+ 
+.sidebar li a:hover {
+  font-size: 22px;
+  background: #f6f6f6;
+}
+
+.sidebar {
+	float: left;
+	width: 25%;
+	margin-left: 2%;
+	margin-top: 100px;
+	border: 1px solid #ccc;
+	padding: 10px;
+}
+
+.sidebar h2{
+	margin-bottom: 10px;
+	border-bottom: 1px solid #ccc;
+}
+
+.sidebar a {
+	color: #487398;
+	font-size: 18px;
+	line-height: 1.2;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+ul.sidebar-items ul {
+	list-style: none;
+}
+
+.sidebar li.current_page_item a {
+	color: black;
+	line-height: 1.5;
+	background-color: #ccc;
+	padding-right: 15px;
+	padding-left: 15px;
+	border-left: 3px solid #B02C34;
+}
+
+.sidebar ul.children li a {
+	color: black;
+	background-color: white;
+	border-left: none;
+}
+
+.background-container {
+	background-image: url('images/triangletexture.png');
+	min-height: 800px;
+}
+
+.page-container {
+	margin-right: 14%;
+	margin-left: 14%;
+	height: 100%;
+	min-height: 800px;
+	background-color: white;
+	border-left: 15px solid #71151F;
+	border-right: 15px solid #71151F;
+	border-bottom: 15px solid gray;
+
+}
+
+.page-content-area {
+	margin-right: 50px;
+	margin-left: 30%;
+	width: 60%;
+	height: 100%;
+	clear: none;
+}
+
+.featured-image img {
+	margin-right: auto;
+	margin-left: auto;
+	display: block;
+	box-shadow: 5px 5px 5px black;
+	margin-bottom: 20px;
+}
+
+
 
 /*--------------------------------------------------------------
 10.2 Asides
@@ -930,9 +1102,9 @@ object {
 .gallery-caption {
 	display: block;
 }
-
+/*--------------------------------------------------------------*/
 /* Landing Page Styles */
-
+/*--------------------------------------------------------------*/
 .ms-caption-stuff {
 	padding: 10px;
 	width: 500px;
@@ -958,56 +1130,61 @@ object {
 }
 
 .widget-container {
-	margin-left: 1%;
-	margin-right: 1%;
 	font-kerning: normal;
+	min-height: 1000px;
+	padding: 2% 5%;
 }
 
 .column-left {
+	background-color: white;
 	text-align: center; 
 	float: left; 
-	width: 33%; 
-	margin-top: 10px;
+	width: 30%; 
 }
 
 .column-right{ 
+	background-color: white;
   text-align: center; 
 	float: right; 
-	width: 33%; 
-	margin-top: 10px;
+	width: 30%; 
+	margin-top: 175px;
 }
 
 .column-center{
-	background-color: #CFCFCF; 
+	background-image: url('images/triangletexture.png'); 
   text-align: center; 
 	display: inline-block; 
-	width: 33%; 
-	margin-top: 10px;
-	border: 1px solid black;
-	padding: 2px;
+	width: 30%; 
+	margin-top: 185px;
+	border-radius: 10px;
+	margin-right: auto;
+	margin-left: 5%;
 }
 
 .at-a-glance .textwidget {
-text-align: left;
-width:66%;
-height: 150px;
-position: relative;
-left: 33%;
-font-family: Arvo;
-color: #FFFFFF;
-line-height: 25px;
-line-height: 59px;
-border-radius: 8px;
-background: rgba(77,25,27,0.84);
-border: 1px solid #4D191B;
+	clear: none;
+	text-align: left !important;
+	width: 58%;
+	height: 150px;
+	position: absolute;
+	left: 37%;
+	font-family: Arvo;
+	color: #FFFFFF;
+	line-height: 25px;
+	line-height: 59px;
+	border-radius: 10px;
+	background: #9b242d;
+	padding: 10px;
 }
 
 .at-a-glance .textwidget p {
+	clear:none;
 	text-align: left;
+	padding: 10px;
 }
 .at-a-glance h2 {
 	clear: none;
-	font-size: 35px;
+	font-size: 45px;
 	text-align: center;
 	color:#C13F46;
 	text-transform: uppercase;
@@ -1031,10 +1208,24 @@ border: 1px solid #4D191B;
 }
 
 .widget h2 {
-	font-size: 35px;
+	border-bottom: 1px solid #ccc;
+	font-size: 45px;
 	text-align: center;
 	color:#C13F46;
 	text-transform: uppercase;
+}
+
+h3.srp-widget-title {
+	border-bottom: 1px solid #ccc;
+	font-size: 45px;
+	text-align: center;
+	color:#C13F46;
+	text-transform: uppercase;
+
+}
+
+.srp-widget-container {
+	text-align: left;
 }
 
 .widget p {
@@ -1056,7 +1247,25 @@ border: 1px solid #4D191B;
 	text-align: left;
 }
 
-#container {
-    margin: 100px auto;
-    width: 150px;
+.qtip {
+	font-size: 16px;
 }
+
+/* footer */
+.site-footer {
+background: #9b242d;
+height: 200px;
+width: 100%;
+clear: both;
+}
+
+.site-footer a {
+	color: white;
+}
+
+.site-info {
+	color: white;
+	text-align: right;
+	padding-right: 30px;
+}
+

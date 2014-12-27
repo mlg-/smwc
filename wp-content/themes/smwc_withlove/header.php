@@ -30,17 +30,21 @@
 				<?php get_search_form(); ?>
 			</div>
 			<div class="main-navigation-logo">
-				<img src="wp-content/themes/smwc_withlove/images/smwc_t.png" alt="Southern Maine Workers' Center Logo"/>
+				<a href="/"><img src="wp-content/themes/smwc_withlove/images/smwc_t.png" alt="Southern Maine Workers' Center Logo"/></a>
 			</div>
 			<nav id="site-navigation" class="main-navigation" role="navigation">
 			<button class="menu-toggle" aria-controls="menu" aria-expanded="false"><?php _e( 'Primary Menu', 'smwc_withlove' ); ?></button>
 			<?php wp_nav_menu( array( 'theme_location' => 'primary' ) ); ?>
+		</nav>
 		</div>
-		<div class="tagline-box">
+	</div>
+		<?php if( is_front_page() ) : ?>
+			<div class="tagline-box">
 			<div class="tagline">
-				<h1>The People Lead</h1>
+				<h1><?php $blog_description = get_bloginfo('description');
+							echo $blog_description ?></h1>
 			</div>
 		</div>
-		</nav><!-- #site-navigation -->
+	<?php endif ?>
 	</header><!-- #masthead -->
 

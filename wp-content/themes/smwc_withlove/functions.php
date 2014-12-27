@@ -48,9 +48,13 @@ function smwc_withlove_setup() {
 	 */
 	//add_theme_support( 'post-thumbnails' );
 
+	add_theme_support( 'post-thumbnails' ); 
+
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus( array(
 		'primary' => __( 'Primary Menu', 'smwc_withlove' ),
+		'footer-menu' => __( 'Footer Menu' ),
+		'sidebar-menu' => __( 'Sidebar Menu' )
 	) );
 
 	/*
