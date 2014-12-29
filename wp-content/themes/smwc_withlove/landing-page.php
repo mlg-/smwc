@@ -11,7 +11,12 @@ get_header(); ?>
 		<main id="main" class="site-main" role="main">
 
 			<div id="bigslider">
-				<?php masterslider(1); ?>
+				<?php if(is_ie() && get_browser_version() <= 9) { 
+					echo do_shortcode( '[wonderplugin_slider id="1"]' ); 
+				}
+					else{ 
+					  echo do_shortcode( '[masterslider_pb  id="1"]' ); 
+					 } ?>
 			</div>
 
 			<div class="widget-container">

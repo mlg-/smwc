@@ -159,7 +159,7 @@ h4,
 h5,
 h6 {
 	font-family: 'Arvo', serif;
-	clear: both;
+	margin-bottom: 10px;
 }
 
 h1 {
@@ -199,6 +199,7 @@ blockquote {
 }
 
 address {
+	font-size: 14px;
 	margin: 0 0 1.5em;
 }
 
@@ -590,8 +591,7 @@ a:active {
 .main-navigation ul ul {
 	box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
 	float: left;
-	position: absolute;
-	top: 1.8em;
+	top: 1.5em;
 	left: -999em;
 	z-index: 99999;
 }
@@ -780,9 +780,14 @@ ul.sub-menu li {
 }
 
 .aligncenter {
-	clear: both;
 	display: block;
-	margin: 0 auto;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+}
+
+.textaligncenter {
+	text-align: center;
 }
 
 /*--------------------------------------------------------------
@@ -885,7 +890,6 @@ li.sidebar-items {
   border-bottom: 1px solid #ccc;
 }
  
- 
 .sidebar-items li a {
   text-decoration: none;
   color: #000;
@@ -945,6 +949,11 @@ ul.sidebar-items ul {
 	border-left: none;
 }
 
+h2.sidebar-title a {
+	color: gray;
+	font-size: 20px;
+}
+
 .background-container {
 	background-image: url('images/triangletexture.png');
 	min-height: 800px;
@@ -970,7 +979,8 @@ ul.sidebar-items ul {
 	clear: none;
 }
 
-.featured-image img {
+img.featured-image {
+	text-align: center;
 	margin-right: auto;
 	margin-left: auto;
 	display: block;
@@ -1131,7 +1141,7 @@ object {
 
 .widget-container {
 	font-kerning: normal;
-	min-height: 1000px;
+	min-height: 800px;
 	padding: 2% 5%;
 }
 
@@ -1215,31 +1225,20 @@ object {
 	text-transform: uppercase;
 }
 
-h3.srp-widget-title {
-	border-bottom: 1px solid #ccc;
-	font-size: 45px;
-	text-align: center;
-	color:#C13F46;
-	text-transform: uppercase;
-
-}
-
-.srp-widget-container {
-	text-align: left;
-}
-
 .widget p {
 	font-size: 16px;
 	font-weight: bold;
 	margin-bottom: 7px;
 }
 
-.widget ul li {
+.widget ul {
+	margin: 0;
 	list-style: none;
 	text-align: left;
 }
 
 .widget a {
+	line-height: 2;
 
 }
 
@@ -1257,6 +1256,8 @@ background: #9b242d;
 height: 200px;
 width: 100%;
 clear: both;
+margin-left: auto;
+margin-right: auto;
 }
 
 .site-footer a {
@@ -1268,4 +1269,27 @@ clear: both;
 	text-align: right;
 	padding-right: 30px;
 }
+
+/* Contact Page Styles */
+.googlemap {
+	float:right;
+	margin-bottom: 12px;
+}
+
+table.contact-table td{
+	width: 40px;
+}
+
+/* List Styles */
+ul.no-image-ul {
+	line-height: 2;
+	list-style: none;
+}
+
+ol.wider-lines {
+	margin-left: 50px;
+	line-height: 2;
+}
+
+
 

@@ -24,13 +24,13 @@
 	<header id="masthead" class="site-header" role="banner">
 		<div class="nav-container">
 			<div class="social-and-search">
-				<a href="TWITTERPLACEHOLDER"><img src="wp-content/themes/smwc_withlove/images/twitter.png"/></a>
-				<a href="FACEBOOKPLACEHOLDER"><img src="wp-content/themes/smwc_withlove/images/facebook.png"/></a>
-				<a href="INSTAGRAMPLACEHOLDER"><img src="wp-content/themes/smwc_withlove/images/instagram.png"/></a><br>
+				<a href="TWITTERPLACEHOLDER"><img src="/wp-content/themes/smwc_withlove/images/twitter.png"/></a>
+				<a href="FACEBOOKPLACEHOLDER"><img src="/wp-content/themes/smwc_withlove/images/facebook.png"/></a>
+				<a href="INSTAGRAMPLACEHOLDER"><img src="/wp-content/themes/smwc_withlove/images/instagram.png"/></a><br>
 				<?php get_search_form(); ?>
 			</div>
 			<div class="main-navigation-logo">
-				<a href="/"><img src="wp-content/themes/smwc_withlove/images/smwc_t.png" alt="Southern Maine Workers' Center Logo"/></a>
+				<a href="/"><img src="/wp-content/themes/smwc_withlove/images/smwc_t.png" alt="Southern Maine Workers' Center Logo"/></a>
 			</div>
 			<nav id="site-navigation" class="main-navigation" role="navigation">
 			<button class="menu-toggle" aria-controls="menu" aria-expanded="false"><?php _e( 'Primary Menu', 'smwc_withlove' ); ?></button>

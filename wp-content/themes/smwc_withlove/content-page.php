@@ -15,7 +15,8 @@
 			  if($post->post_parent) {
 			  $children = wp_list_pages("title_li=&child_of=".$post->post_parent."&echo=0");
 			  $titlenamer = get_the_title($post->post_parent);
-			  }
+				$parentlink = get_permalink($post->post_parent);
+							  }
 
 				  else {
 				  $children = wp_list_pages("title_li=&child_of=".$post->ID."&echo=0");
@@ -23,7 +24,7 @@
 				  }
 				  if ($children) { ?>
 
-				  <h2> <?php echo $titlenamer; ?> </h2>
+				  <h2 class="sidebar-title"><a href="<? echo $parentlink; ?>"> <? echo $titlenamer; ?></a> </h2>
 				  <ul class="sidebar-items">
 				  <?php echo $children; ?>
 				  </ul>
@@ -36,17 +37,10 @@
 					<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
 				</header><!-- .entry-header -->
 
-				<div class="featured-image">
-						<?php
-									// check if the post has a Post Thumbnail assigned to it.
-						if ( has_post_thumbnail() ) {
-							the_post_thumbnail();
-						} 
-						the_content();
+					<?php the_post_thumbnail('', array('class' => 'featured-image')); ?>
+					<?php	the_content();
 						?>
-				</div>
 
-					<?php the_content(); ?>
 					<?php
 						wp_link_pages( array(
 							'before' => '<div class="page-links">' . __( 'Pages:', 'smwc_withlove' ),
