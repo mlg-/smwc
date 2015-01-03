@@ -15,9 +15,8 @@
 		<div class="left-footer-column">
 				<div class="aligncenter">
 					<h1 class="mission">The Southern Maine Workers’ Center is a nonprofit membership organization committed to creating a grassroots, people-powered movement that improves the lives, working conditions, and terms of employment for working and poor people in Maine.</h1>
-				<a href="/donate" class="donatebutton">Donate</a>
-			</div>
-
+					<a href="/donate" class="donatebutton">Donate</a>
+				</div>
 		</div>
 		<div class="right-footer-column">
 			<?php wp_nav_menu( array( 'theme_location' => 'footer-menu', 'container_class' => 'footer_menu_class' ) );
@@ -31,7 +30,7 @@
 		</div><!-- .site-info -->
 
  	</footer><!-- #colophon -->
-
-
+</div>
+<?php wp_footer();?>
 </body>
 </html>

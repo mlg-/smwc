@@ -1294,6 +1294,15 @@ h1.mission {
 	border-right: none;
 }
 
+/*this is to fix some footer styles that get inherited by the admin bar for reasons I don't totally understand! */
+
+#wp-admin-bar-root-default li {
+	border-right: none!important;
+}
+
+/* back to your regularly scheduled footer styles */
+
+
 .left-footer-column {
 	width: 30%;
 	margin-left: 15%;
