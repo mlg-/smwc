@@ -7,7 +7,7 @@
 
 get_header(); ?>
 
-	<div id="primary" class="content-area">
+	<div id="primary" class="content-area-landing">
 		<main id="main" class="site-main" role="main">
 
 			<div id="bigslider">
@@ -19,7 +19,7 @@ get_header(); ?>
 					 } ?>
 			</div>
 
-			<div class="widget-container">
+			<div class="widget-container clearfix">
 				<div class="column-left">
 				    
 				    <?php if (function_exists('dynamic_sidebar') && dynamic_sidebar('left_column')) : else : ?>
