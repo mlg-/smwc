@@ -30,9 +30,9 @@
 				'after'  => '</div>',
 			) );
 		?>
-	</div><!-- .entry-content -->
-
-	<footer class="entry-footer">
+			<footer class="entry-footer">
 		<?php smwc_withlove_entry_footer(); ?>
 	</footer><!-- .entry-footer -->
+
+	</div><!-- .entry-content -->
 </article><!-- #post-## -->

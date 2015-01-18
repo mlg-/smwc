@@ -21,7 +21,7 @@
 <div id="page" class="hfeed site">
 	<a class="skip-link screen-reader-text" href="#content"><?php _e( 'Skip to content', 'smwc_withlove' ); ?></a>
 
-	<header id="masthead" class="site-header" role="banner">
+	<header id="masthead" role="banner">
 		<div class="nav-container">
 			<div class="social-and-search">
 				<a href="TWITTERPLACEHOLDER"><img src="/wp-content/themes/smwc_withlove/images/twitter.png"/></a>

@@ -8,7 +8,14 @@
 	<div class="page-container">
 
 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-			<header class="entry-header">
+			<header id="singleblogentryheader">
+						<?php if ( has_post_thumbnail() ) { ?>
+							<div class="featured-post-image">
+							<?php the_post_thumbnail(); ?>
+							</div>
+							<?php } 
+							?>
+						
 				<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
 
 				<div class="entry-meta">
@@ -24,11 +31,9 @@
 						'after'  => '</div>',
 					) );
 				?>
+			<footer class="entry-footer">
+				<?php smwc_withlove_entry_footer(); ?>
+			</footer><!-- .entry-footer -->
 			</div><!-- .entry-content -->
-		</div><!--page container-->
-	</div><!--background container-->
 
-	<footer class="entry-footer">
-		<?php smwc_withlove_entry_footer(); ?>
-	</footer><!-- .entry-footer -->
 </article><!-- #post-## -->

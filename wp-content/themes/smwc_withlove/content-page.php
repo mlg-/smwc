@@ -5,7 +5,7 @@
  * @package smwc_withlove
  */
 ?>
-<div class="background-container">
+<div class="background-container" data-type="background" data-speed="10">
 
 	<div class="page-container">
 
@@ -37,9 +37,14 @@
 					<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
 				</header><!-- .entry-header -->
 
-					<?php the_post_thumbnail('', array('class' => 'featured-image')); ?>
-					<?php	the_content();
+						<?php if ( has_post_thumbnail() ) { ?>
+							<div class="featured-post-image">
+							<?php the_post_thumbnail(); ?>
+							</div>
+							<?php } 
+							?>					<?php	the_content();
 						?>
+
 
 					<?php
 						wp_link_pages( array(

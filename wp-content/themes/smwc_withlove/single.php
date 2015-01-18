@@ -25,6 +25,10 @@ get_header(); ?>
 
 		<?php endwhile; // end of the loop. ?>
 
+				</div><!--page container-->
+	</div><!--background container-->
+
+
 		</main><!-- #main -->
 	</div><!-- #primary -->
 
