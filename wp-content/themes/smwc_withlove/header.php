@@ -20,31 +20,32 @@
 <body <?php body_class(); ?>>
 <div id="page" class="hfeed site">
 	<a class="skip-link screen-reader-text" href="#content"><?php _e( 'Skip to content', 'smwc_withlove' ); ?></a>
-
-	<header id="masthead" role="banner">
-		<div class="nav-container">
+	<?php if ( is_front_page() ) { ?>
+	<header role="banner" class="nav-container">
+	<?php } else { ?>
+	<header role="banner" class="nav-container-inner">
+	<?php } ?>
 			<div class="social-and-search">
 				<a href="TWITTERPLACEHOLDER"><img src="/wp-content/themes/smwc_withlove/images/twitter.png"/></a>
 				<a href="FACEBOOKPLACEHOLDER"><img src="/wp-content/themes/smwc_withlove/images/facebook.png"/></a>
 				<a href="INSTAGRAMPLACEHOLDER"><img src="/wp-content/themes/smwc_withlove/images/instagram.png"/></a><br>
 				<?php get_search_form(); ?>
 			</div>
-			<div class="main-navigation-logo">
-				<a href="/"><img src="/wp-content/themes/smwc_withlove/images/smwc_t.png" alt="Southern Maine Workers' Center Logo"/></a>
-			</div>
+			<div id="main-navigation-bg">
 			<nav id="site-navigation" class="main-navigation" role="navigation">
-			<button class="menu-toggle" aria-controls="menu" aria-expanded="false"><?php _e( 'Primary Menu', 'smwc_withlove' ); ?></button>
-			<?php wp_nav_menu( array( 'theme_location' => 'primary' ) ); ?>
-		</nav>
-		</div>
-	</div>
-		<?php if( is_front_page() ) : ?>
-			<div class="tagline-box">
+				<button class="menu-toggle" aria-controls="menu" aria-expanded="false"><?php _e( 'Primary Menu', 'smwc_withlove' ); ?></button>
+					<?php wp_nav_menu( array( 'theme_location' => 'primary' ) ); ?>
+				</div>
+				<div class="main-navigation-logo">
+					<a href="/"><img src="/wp-content/themes/smwc_withlove/images/smwc_t.png" alt="Southern Maine Workers' Center Logo"/></a>
+				</div>
+			</nav>
+			<?php if( is_front_page() ) : ?>
 			<div class="tagline">
 				<h1><?php $blog_description = get_bloginfo('description');
 							echo $blog_description ?></h1>
 			</div>
 		</div>
 	<?php endif ?>
-	</header><!-- #masthead -->
+</header><!-- #masthead -->
 

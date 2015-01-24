@@ -15,14 +15,10 @@ get_header(); ?>
 
 <div class="background-container">
 
-	<div class="page-container">
+	<div class="page-container-blog">
 		
-		<div id="primary" class="content-area">
-
 			<h1 class="aligncenter" id="blogtitle">SMWC BLOG</h1>
 		
-			<main id="main" class="site-main" role="main">
-
 				<div class="blog-posts">
 
 				<?php if ( have_posts() ) : ?>
@@ -50,8 +46,6 @@ get_header(); ?>
 
 			</div>
 
-				</main><!-- #main -->
-			</div><!-- #primary -->
 		</div><!--page container-->
 	</div><!--background container-->
 

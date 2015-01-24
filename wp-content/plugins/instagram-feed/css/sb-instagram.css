@@ -81,7 +81,7 @@
 #sb_instagram img{
   display: block;
   padding: 0 !important;
-  margin: 0 !important;
+  margin: auto !important;
   max-width: 100% !important;
 }
 #sb_instagram .sbi_link{

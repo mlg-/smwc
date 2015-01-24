@@ -18,7 +18,8 @@ Text Domain: smwc_withlove
 4.0 Forms
 5.0 Navigation
 	5.1 Links
-	5.2 Menus
+	5.2 Menus & Header Nav Block
+	5.3 Sidebar Menu for Inner Pages
 6.0 Accessibility
 7.0 Alignments
 8.0 Clearings
@@ -31,6 +32,11 @@ Text Domain: smwc_withlove
 12.0 Media
 	12.1 Captions
 	12.2 Galleries
+13.0 Landing Page Styles
+14.0 Footer Styles
+15.0 Specific Page Styles
+	15.1 Contact Page Styles
+	15.2 Blog Styles
 --------------------------------------------------------------*/
 
 /*--------------------------------------------------------------
@@ -148,7 +154,8 @@ textarea {
 }
 
 p {
-	font-size: 14px;
+	font-family: 'Signika Negative', sans-serif;
+	font-size: 16px;
 }
 
 h1,
@@ -195,6 +202,8 @@ i {
 
 blockquote {
 	margin: 0 1.5em;
+	border-left: #ccc 1px solid;
+
 }
 
 address {
@@ -272,7 +281,7 @@ hr {
 
 ul,
 ol {
-	margin: 0 0 1.5em 3em;
+/*	margin: 0 0 1.5em 3em; */
 }
 
 ul {
@@ -287,6 +296,17 @@ li > ul,
 li > ol {
 	margin-bottom: 0;
 	margin-left: 1.5em;
+}
+
+/* Specific List Styles */
+ul.no-image-ul {
+	line-height: 2;
+	list-style: none;
+}
+
+ol.wider-lines {
+	margin-left: 50px;
+	line-height: 2;
 }
 
 dt {
@@ -437,23 +457,51 @@ a:active {
 }
 
 /*--------------------------------------------------------------
-5.2 Menus
+5.2 Menus & Header Nav Block
 --------------------------------------------------------------*/
 .site-header {
 	background-image: url('images/linenlight.png');
 }
 
-.nav-container {
+header.nav-container {
+	position: relative;
+	background-image: url('images/linenlight.png');
+	min-height: 235px;
+	width: 100%;
+	border-left: 15px solid #71151F;
+	border-right: 15px solid #71151F;
+	border-top: 15px solid #4F4F4F;
+}
+
+header.nav-container-inner {
 	position:relative;
 	background-image: url('images/linenlight.png');
-	min-height: 100px;
+	min-height: 130px;
+	width: 100%;
+}
+
+@media (min-width: 760px) and (max-width: 1140px) {
+	header.nav-container {
+		min-height: 210px;
+	}
+	header.nav-container-inner {
+		min-height: 110px;
+	}
 }
 
 .social-and-search {
 	width: 200px;
 	text-align: center;
-	margin-left: 75%;
+	position: absolute;
+	right: 190px;
 	padding-top: 20px;
+}
+
+@media (min-width: 760px) and (max-width: 1140px) {
+	.social-and-search {
+		position: absolute;
+		right: 10px;
+	}
 }
 
 .social-and-search a {
@@ -463,6 +511,16 @@ a:active {
 .social-and-search img {
 	border: 2px #fff solid;
 	border-radius: 50%;
+	height: auto;
+}
+
+@media (min-width: 760px) and (max-width: 1140px) {
+.social-and-search img {
+	border: 2px #fff solid;
+	border-radius: 50%;
+	max-height: 30px;
+	height: auto;
+	}
 }
 
 .social-and-search form {
@@ -507,6 +565,7 @@ a:active {
 	box-shadow: none;
 	background: white url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAIVBMVEW/v7+/v78AAAC/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v79QUkolAAAAC3RSTlOLYAAJeoMjRhpOcbsbtd4AAABJSURBVHjaVc1JDsAgDATB9uAF8v8Hx0QcSN9KssZI5eClDj18PRsFlmlQDcfUGd6A3EgYP1xncQ+sa5qYOk9jRQt1Y0izhU5bL2o2AW3ZQKeJAAAAAElFTkSuQmCC) 10px 6px no-repeat;
 }
+
 .social-and-search input[type="text"]:invalid + input[type="reset"] {
 	visibility:hidden;
 }
@@ -529,68 +588,72 @@ a:active {
 }
 
 .main-navigation-logo {
-	position:absolute;
-	top:0;
-	left: 75px;
-	margin-left: 10px;
+	position: absolute;
+	top: 0;
+	margin-left: 85px;
 	width: 250px;
 	z-index: 1
 }
 
-.main-navigation {
+@media (min-width: 760px) and (max-width: 1140px) {
+	.main-navigation-logo {
+		margin-left: 50px;
+		top: 10px;
+		width: 220px;
+	}
+}
+
+#main-navigation-bg {
 	width: 100%;
+	background-color: #4F4F4F;
+	height: 45px;
+	top: 100px;
+	position: absolute;
+}
+
+.main-navigation {
+	clear: both;
+	display: block;
+	float: left;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
 }
 
 .main-navigation ul {
-	background-color: #4F4F4F;
-	width:100%;
-	height: 45px;
 	list-style: none;
-	margin: 0;
-	padding-left: 340px;
-	position:absolute;
-	top: 100px;
-	line-height: 1.9;
+	padding-left: 0;
+	display: inline-block;
+	margin-bottom: 10px;
 }
 
 .main-navigation li {
-	text-transform: uppercase;
-	color: white;
-	font-size: 20px;
 	float: left;
 	position: relative;
-	padding: 6px 10px 0;
+	padding: 2px 10px;
+	text-transform: uppercase;
+	font-size: 20px;
+	line-height: 1.7em;
+	text-align: left;
+	background-color: #4F4F4F;
 }
-
-.main-navigation li .dropdownTriangle {
-    background: none repeat scroll 0 0 transparent;
-    border-bottom: 15px solid black;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    bottom: 0;
-    display: none;
-    height: 0;
-    left: 50%;
-    margin-bottom: -1px;
-    margin-left: -15px;
-    position: absolute;
-    visibility: hidden;
-    width: 0;
-   }
 
 .main-navigation a {
 	color: white;
 	display: block;
 	text-decoration: none;
-	vertical-align: center;
 }
 
 .main-navigation ul ul {
 	box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
 	float: left;
+	position: absolute;
 	top: 1.5em;
 	left: -999em;
 	z-index: 99999;
+	margin-top: 2px;
+	padding-top: 5px;
 }
 
 .main-navigation ul ul ul {
@@ -602,24 +665,42 @@ a:active {
 	width: 200px;
 }
 
-.main-navigation ul ul li {
+.main-navigation ul ul li:first-child a:after {
+	content: '';
+	position: absolute;
+	left: 30px;
+	top: -8px;
+	width: 0;
+	height: 0;
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-bottom: 8px solid #D32636;
+}
+
+.main-navigation ul ul ul li:first-child a:after {
+	border: none;
+}
+
+.main-navigation ul ul ul ul li:first-child a:after {
+	border: none;
+}
+
+li#menu-item-896 a:first-child:after {
+	border-bottom: 8px solid #4d4d4d;
+	content: none;
 
 }
 
 .main-navigation li:hover > a {
-	border: none;
 }
 
 .main-navigation ul ul :hover > a {
-	border: none;
 }
 
 .main-navigation ul ul a:hover {
-	border: none;
 }
 
 .main-navigation ul li:hover > ul {
-	border: none;
 	left: auto;
 }
 
@@ -630,44 +711,23 @@ a:active {
 .main-navigation .current_page_item > a,
 .main-navigation .current-menu-item > a,
 .main-navigation .current_page_ancestor > a {
-		background-color: #9b242d;
-		padding: 0 2px;
-
 }
 
-ul.sub-menu {
-	opacity: 0.90;
-	display: block;
-	left: 0px;
-	padding-left: 0px;
-	list-style: outside none none;
-	float: left;
-	margin-top: 5px;
-	border: 1px solid red;
+.sub-menu ul {
+	margin-top: 10px;
 }
 
-ul.sub-menu li:first {
-	margin-top: 25px;
-	width: 0; 
-	height: 0; 
-	border-left: 5px solid transparent;
-	border-right: 5px solid transparent;
-	
-	border-bottom: 5px solid black;
-}
-
-ul.sub-menu ul {
-}
-
-ul.sub-menu li {
-	font-size: 16px;
+.sub-menu li {
+	margin-left: -30px;
 	text-transform: none;
-	background-color: #4F4F4F;
+	font-size: 18px;
+	font-style: normal;
+	line-height: 1.2em;
+	padding: 6px;
 }
 
 
-
-/* Small menu */
+/* Small menu. */
 .menu-toggle {
 	display: none;
 }
@@ -683,33 +743,122 @@ ul.sub-menu li {
 	}
 }
 
-.tagline-box {
-	border-top: 2px #B02C34 solid;
-	background-color: white;
+.tagline { /* Tagline is the site text below the primary nav menu,
+ can be set in the Customize theme menu */
 	width: 100%;
 	height: 85px;
-	position:relative;
-	top: 45px;
+	position: absolute;
+	top: 150px;
+	background: rgb(237,237,237); /* Old browsers */
+	background: -moz-linear-gradient(top,  rgba(237,237,237,1) 0%, rgba(219,219,219,1) 60%, rgba(171,171,171,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(237,237,237,1)), color-stop(60%,rgba(219,219,219,1)), color-stop(100%,rgba(171,171,171,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(237,237,237,1) 0%,rgba(219,219,219,1) 60%,rgba(171,171,171,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(237,237,237,1) 0%,rgba(219,219,219,1) 60%,rgba(171,171,171,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(237,237,237,1) 0%,rgba(219,219,219,1) 60%,rgba(171,171,171,1) 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  rgba(237,237,237,1) 0%,rgba(219,219,219,1) 60%,rgba(171,171,171,1) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#ababab',GradientType=0 ); /* IE6-9 */
 }
 
 .tagline h1 {
 	clear: none;
-	font-size: 50px;
+	font-size: 56px;
 	color: #9b242d;
 	text-align: center;
-	margin-left: 296px;
-	width: 800px;
-}
-
-.content-area-landing {
-	position: relative;
-	margin-top: 44px;
 }
 
 .content-area {
 	position: relative;
-	margin-top: 45px;
+	margin-top: -85px;
 }
+
+.content-area-landing {
+
+}
+
+/*--------------------------------------------------------------
+ 	5.3 Sidebar Menu for Inner Pages 
+---------------------------------------------------------------- */
+
+ul.sidebar-items {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+ 
+li.sidebar-items {
+  font: 200 20px;
+  border-bottom: 1px solid #ccc;
+}
+ 
+.sidebar-items li a {
+  text-decoration: none;
+  color: #000;
+  display: block;
+  width: 210px;
+ 
+  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
+  transition: font-size 0.3s ease, background-color 0.3s ease;
+}
+ 
+.sidebar li a:hover {
+  font-size: 22px;
+  background: #f6f6f6;
+	border-left: 3px solid #B02C34;
+	padding-left: 15px;
+}
+
+.sidebar {
+	float: left;
+	width: 25%;
+	margin-left: 2%;
+	margin-top: 100px;
+	border: 1px solid #ccc;
+	padding: 10px;
+}
+
+.sidebar h2{
+	margin-bottom: 10px;
+	border-bottom: 1px solid #ccc;
+}
+
+.sidebar a {
+	color: #487398;
+	font-size: 18px;
+	line-height: 1.2;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+ul.sidebar-items ul {
+	list-style: none;
+}
+
+.sidebar li.current_page_item a {
+	color: black;
+	line-height: 1.5;
+	background-color: #ccc;
+	padding-right: 15px;
+	padding-left: 15px;
+	border-left: 3px solid #B02C34;
+}
+
+.sidebar ul.children li a {
+	background-color: inherit;
+	color: black;
+	border-left: none;
+}
+
+h2.sidebar-title a {
+	color: gray;
+	font-size: 20px;
+}
+
+/* Comment Navigation Styles (Right now they aren't turned on,
+but if they were to be included in the future) */ 
+
 .site-main .comment-navigation,
 .site-main .paging-navigation,
 .site-main .post-navigation {
@@ -720,7 +869,6 @@ ul.sub-menu li {
 .comment-navigation .nav-previous,
 .paging-navigation .nav-previous,
 .post-navigation .nav-previous {
-	float: left;
 	width: 50%;
 }
 
@@ -870,96 +1018,18 @@ ul.sub-menu li {
 	margin: 0 0 1.5em;
 }
 
-h1.entry-title {
+h1.entry-title { 
 	color: #D12636;
 	font-size: 40px;
 	text-align: center;
 	border-bottom: 1px solid #ccc;
-	padding-top: 20px;
-	padding-bottom: 20px;
+	padding: 20px 0;
 	margin-bottom: 20px;
 	clear: none;
 }
 
-ul.sidebar-items {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
- 
-li.sidebar-items {
-  font: 200 20px;
-  border-bottom: 1px solid #ccc;
-}
- 
-.sidebar-items li a {
-  text-decoration: none;
-  color: #000;
-  display: block;
-  width: 210px;
- 
-  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
-  transition: font-size 0.3s ease, background-color 0.3s ease;
-}
- 
-.sidebar li a:hover {
-  font-size: 22px;
-  background: #f6f6f6;
-	border-left: 3px solid #B02C34;
-	padding-left: 15px;
-}
-
-.sidebar {
-	float: left;
-	width: 25%;
-	margin-left: 2%;
-	margin-top: 100px;
-	border: 1px solid #ccc;
-	padding: 10px;
-}
-
-.sidebar h2{
-	margin-bottom: 10px;
-	border-bottom: 1px solid #ccc;
-}
-
-.sidebar a {
-	color: #487398;
-	font-size: 18px;
-	line-height: 1.2;
-	padding-top: 4px;
-	padding-bottom: 4px;
-}
-
-ul.sidebar-items ul {
-	list-style: none;
-}
-
-.sidebar li.current_page_item a {
-	color: black;
-	line-height: 1.5;
-	background-color: #ccc;
-	padding-right: 15px;
-	padding-left: 15px;
-	border-left: 3px solid #B02C34;
-}
-
-.sidebar ul.children li a {
-	background-color: inherit;
-	color: black;
-	border-left: none;
-}
-
-h2.sidebar-title a {
-	color: gray;
-	font-size: 20px;
-}
-
-.background-container {
-	background: url('images/bg/003.jpg') top no-repeat;
+.background-container { /* Inner page background photo layer */
+	background: url('images/bg/003.jpg') top repeat;
 	background-size: 150%;
 	background-attachment: fixed;
 	opacity: 80%;
@@ -967,17 +1037,29 @@ h2.sidebar-title a {
 }
 
 .page-container {
-	margin-right: 14%;
-	margin-left: 14%;
+	margin: 100px 202px 0;
+	min-width: 1000px;
 	height: 100%;
+	padding-top: 20px;
 	min-height: 800px;
 	background-color:rgba(255,255,255,0.90);
 	border-left: 15px solid #71151F;
 	border-right: 15px solid #71151F;
 	border-bottom: 15px solid gray;
-
-
 }
+
+.page-container-blog {
+	margin: 0 202px 0;
+	min-width: 1000px;
+	height: 100%;
+	padding-top: 20px;
+	min-height: 800px;
+	background-color:rgba(255,255,255,0.90);
+	border-left: 15px solid #71151F;
+	border-right: 15px solid #71151F;
+	border-bottom: 15px solid gray;
+}
+
 
 .page-content-area {
 	margin-right: 50px;
@@ -985,7 +1067,6 @@ h2.sidebar-title a {
 	width: 60%;
 	height: 100%;
 	clear: none;
-
 }
 
 .featured-post-image {
@@ -998,14 +1079,25 @@ h2.sidebar-title a {
  box-shadow: 5px 5px 5px gray;
  margin-bottom: 20px;
  border: 10px #53171C solid;
-
 }
 
 img.featured-image {
  height: 100%;
- width: 100%;        
- 
- }
+ width: 100%; 
+ text-align: center;
+ margin-left: auto;
+ margin-right: auto;
+ display: block;       
+}
+
+img.attachment-post-thumbnail {
+ height: 100%;
+ width: 100%; 
+ text-align: center;
+ margin-left: auto;
+ margin-right: auto;
+ display: block;       
+}
 
 .blog-posts {
 	margin: 0 30px;
@@ -1045,8 +1137,6 @@ article {
 .nav-links {
 	margin: 10px;
 }
-
-
 
 /*--------------------------------------------------------------
 10.2 Asides
@@ -1171,30 +1261,37 @@ object {
 	display: block;
 }
 /*--------------------------------------------------------------*/
-/* Landing Page Styles */
+/* 13.0 Landing Page Styles */
 /*--------------------------------------------------------------*/
 
-#bigslider {
-	background-image: url('images/linen.png');
-	background-color: #4F4F4F;
+#bigslider { /* Master Slider plugin overrides */
+	border-left: 15px solid #71151F;
+	border-right: 15px solid #71151F;
+	padding-top: 15px;
 }
 
-.ms-caption-stuff {
+.ms-slide-bgcont img{
+	width: 100% !important;
+}
+
+.ms-caption-stuff { /* Master slider captions */
 	padding: 10px;
 	width: 500px;
 	height: 190px;
 	position: relative;
-/*	border-radius: 40px; */
 	left: 55%;
-	background-color: #625C5D;
-	border: 0.5px solid white;
-	opacity: 0.85;
+	background-color: #363636;
+	opacity: 0.75;
 }
 
-.ms-caption-stuff h1 {
-	text-shadow: gray 0 2px;
+.ms-caption-stuff h2 {
+	text-shadow: #9b242d 0 2px;
 	color: white;
 	text-align: center;
+}
+
+.ms-caption-stuff h2 a {
+	text-decoration: none;
 }
 
 .ms-caption-stuff p {
@@ -1203,14 +1300,61 @@ object {
 	font-size: 16px;
 }
 
+.ms-caption-stuff a {
+	font-style: bold;
+	color: white;
+	text-decoration: underline;
+}
+
 .widget-container {
 	font-kerning: normal;
 	min-height: 800px;
 	padding: 2% 5%;
-	border-left: 10px #4F4F4F solid;
-	border-right: 10px #4F4F4F solid;
-	border-bottom: 10px #4F4F4F solid;
+	border-left: 15px solid #71151F;
+	border-right: 15px solid #71151F;
+	border-bottom: 15px solid gray;
 	clear: both;
+}
+
+.widget p {
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 7px;
+}
+
+.widget ul {
+	margin: 0;
+	list-style: none;
+	text-align: left;
+}
+
+.widget a {
+	line-height: 1.8;
+}
+
+.widget h2 {
+	border-bottom: 1px solid #ccc;
+	font-size: 45px;
+	text-align: center;
+	color: #C13F46;
+	text-transform: uppercase;
+}
+
+.widget input[type=email] {
+	width: 180px;
+	font-size: 14px;
+	line-height: 2em;
+}
+
+.widget input[type=submit] {
+	color: white;
+	background-color: green;
+	font-size: 14px;
+	border: none;
+	text-shadow: none;
+	margin-left: 2px;
+	line-height: 1.4em;
+	width: 90px;
 }
 
 .column-left {
@@ -1237,12 +1381,13 @@ object {
 	/* border-radius: 10px; */
 	margin-right: auto;
 	margin-left: 5%;
+	border: 4px #ccc solid;
 }
 
 .at-a-glance .textwidget {
 	clear: none;
 	text-align: left !important;
-	width: 58%;
+	width: 55%;
 	height: 150px;
 	position: absolute;
 	left: 37%;
@@ -1253,51 +1398,36 @@ object {
 	/* border-radius: 10px; */
 	background: #9b242d;
 	padding: 10px;
+	border: 4px solid #ccc;
 }
 
 .at-a-glance .textwidget p {
 	clear:none;
+	font-size: 22px;
 	text-align: left;
 	padding: 10px;
+	line-height: 1.5;
 }
+
 .at-a-glance h2 {
 	clear: none;
-	font-size: 45px;
-	text-align: center;
-	color:#C13F46;
-	text-transform: uppercase;
-}
-
-.widget input[type=email] {
-	width: 180px;
-	font-size: 14px;
-	line-height: 2em;
-}
-
-.widget input[type=submit] {
-	color: white;
-	background-color: green;
-	font-size: 14px;
-	border: none;
-	text-shadow: none;
-	margin-left: 2px;
-	line-height: 1.4em;
-	width: 90px;
-}
-
-#mce-EMAIL {
-	margin-bottom: 5px;
-}
-
-.widget h2 {
-	border-bottom: 1px solid #ccc;
 	font-size: 45px;
 	text-align: center;
 	color: #C13F46;
 	text-transform: uppercase;
 }
 
-h3.srp-widget-title {
+.at-a-glance h2:after {
+	content: '';
+	border-bottom: 1px solid #ccc;
+	width: 50%;
+}
+
+#mce-EMAIL { /* MailChimp Override */
+	margin-bottom: 5px;
+}
+
+h3.srp-widget-title { /* Special Recent Posts (srp) plugin overrides */
 	border-bottom: 1px solid #ccc;
 	font-size: 45px;
 	text-align: center;
@@ -1311,7 +1441,6 @@ a.srp-post-title-link {
 	padding: 0px 5px;
 	color:#C13F46;
 	background-color: #ddd;
-
 }
 
 a:hover.srp-post-title-link {
@@ -1323,24 +1452,12 @@ a:hover.srp-post-title-link {
 	text-align: left;
 }
 
-.widget p {
-	font-size: 16px;
-	font-weight: bold;
-	margin-bottom: 7px;
+#sbi_instagram img {
+	margin-right: auto !important;
+	margin-left: auto !important;
 }
 
-.widget ul {
-	margin: 0;
-	list-style: none;
-	text-align: left;
-}
-
-.widget a {
-	line-height: 1.8;
-
-}
-
-.gce-feed {
+.gce-feed { /* Google Calendar (gce) Styles */
 	text-align: left;
 }
 
@@ -1348,20 +1465,22 @@ a:hover.srp-post-title-link {
 	color:#C13F46;
 }
 
-.qtip {
+.qtip { 
 	font-size: 16px;
 }
 
-/* footer */
+/*------------------------------------------
+14.0 Footer Styles
+--------------------------------------------*/
 
 .site-footer {
-background: #9b242d;
-min-height: 260px;
-width: 100%;
-clear: both;
-padding-top: 10px;
-margin-left: auto;
-margin-right: auto;
+	background: #9b242d;
+	min-height: 260px;
+	width: 100%;
+	clear: both;
+	padding-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .site-footer a {
@@ -1396,14 +1515,14 @@ h1.mission {
 	border-right: none;
 }
 
-/*this is to fix some footer styles that get inherited by the admin bar for reasons I don't totally understand! */
+/*this is to fix some footer styles that get
+inherited by the admin bar */
 
 #wp-admin-bar-root-default li {
 	border-right: none!important;
 }
 
 /* back to your regularly scheduled footer styles */
-
 
 .left-footer-column {
 	width: 32%;
@@ -1471,18 +1590,34 @@ h1.mission {
 	text-decoration:none;
 	text-align:center;
 }
+
 .donatebutton:hover {
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #ffc477) );
 	background:-moz-linear-gradient( center top, #fb9e25 5%, #ffc477 100% );
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb9e25', endColorstr='#ffc477');
 	background-color:#fb9e25;
 }
+
 .donatebutton:active {
 	position:relative;
 	top:1px;
 }
 
-/* Contact Page Styles */
+.footer_menu_class ul {
+	margin: 0 0 45px 30px;
+  text-align: left;
+}
+
+.footer_menu_class ul li {
+	padding: 0 5px;
+	font-size: 1.1em;
+
+}
+
+/* ----------------------------------
+	15.1 Contact Page Styles
+------------------------------------*/
+
 .googlemap {
 	float:right;
 	margin-bottom: 12px;
@@ -1492,23 +1627,18 @@ table.contact-table td{
 	width: 40px;
 }
 
-/* List Styles */
-ul.no-image-ul {
-	line-height: 2;
-	list-style: none;
-}
-
-ol.wider-lines {
-	margin-left: 50px;
-	line-height: 2;
-}
-
-/* Blog Styles */
+/*------------------------------------
+	15.2 Blog Styles
+-------------------------------------*/
 
 .entry {
 	border-bottom: 1px solid #71151f;
 	padding-bottom: 5px;
 }
 
+/* Other page styles */
 
+.search-page {
+	padding: 30px 50px;
+}
 
