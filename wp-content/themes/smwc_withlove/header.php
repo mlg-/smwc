@@ -33,7 +33,7 @@
 			</div>
 			<div id="main-navigation-bg">
 			<nav id="site-navigation" class="main-navigation" role="navigation">
-				<button class="menu-toggle" aria-controls="menu" aria-expanded="false"><?php _e( 'Primary Menu', 'smwc_withlove' ); ?></button>
+				<button class="menu-toggle" aria-controls="menu" aria-expanded="false"><?php _e( 'Menu', 'smwc_withlove' ); ?></button>
 					<?php wp_nav_menu( array( 'theme_location' => 'primary' ) ); ?>
 				</div>
 				<div class="main-navigation-logo">
