@@ -665,7 +665,7 @@ header.nav-container-inner {
 	width: 200px;
 }
 
-.main-navigation ul ul li:first-child a:after {
+.main-navigation ul ul li:first-child  a:after {
 	content: '';
 	position: absolute;
 	left: 30px;
@@ -678,16 +678,25 @@ header.nav-container-inner {
 }
 
 .main-navigation ul ul ul li:first-child a:after {
+	content: '';
 	border: none;
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-bottom: 8px solid #4F4F4F;
 }
 
 .main-navigation ul ul ul ul li:first-child a:after {
-	border: none;
+	content: '';
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-bottom: 8px solid #4F4F4F;
 }
 
-li#menu-item-896 a:first-child:after {
-	border-bottom: 8px solid #4d4d4d;
-	content: none;
+ul.sub-menu li:first-child a:after {
+	content: '';
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-bottom: 8px solid #4F4F4F;
 
 }
 

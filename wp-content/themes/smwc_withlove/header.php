@@ -26,9 +26,9 @@
 	<header role="banner" class="nav-container-inner">
 	<?php } ?>
 			<div class="social-and-search">
-				<a href="TWITTERPLACEHOLDER"><img src="/wp-content/themes/smwc_withlove/images/twitter.png"/></a>
-				<a href="FACEBOOKPLACEHOLDER"><img src="/wp-content/themes/smwc_withlove/images/facebook.png"/></a>
-				<a href="INSTAGRAMPLACEHOLDER"><img src="/wp-content/themes/smwc_withlove/images/instagram.png"/></a><br>
+				<a href="https://twitter.com/maineworkers"><img src="/wp-content/themes/smwc_withlove/images/twitter.png"/></a>
+				<a href="https://www.facebook.com/MaineWorkers"><img src="/wp-content/themes/smwc_withlove/images/facebook.png"/></a>
+				<a href="http://instagram.com/maineworkers/"><img src="/wp-content/themes/smwc_withlove/images/instagram.png"/></a><br>
 				<?php get_search_form(); ?>
 			</div>
 			<div id="main-navigation-bg">
