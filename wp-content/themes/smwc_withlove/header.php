@@ -40,12 +40,15 @@
 					<a href="/"><img src="/wp-content/themes/smwc_withlove/images/smwc_t.png" alt="Southern Maine Workers' Center Logo"/></a>
 				</div>
 			</nav>
-			<?php if( is_front_page() ) : ?>
+			<?php if ( is_front_page() ) { ?>
 			<div class="tagline">
 				<h1><?php $blog_description = get_bloginfo('description');
 							echo $blog_description ?></h1>
 			</div>
-		</div>
-	<?php endif ?>
+				<?php }	else { ?>
+			<div class="mobile-search">
+			<?php get_search_form(); ?>
+			<?php	 } ?>
+			</div>
 </header><!-- #masthead -->
 
