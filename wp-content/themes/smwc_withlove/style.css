@@ -1709,13 +1709,13 @@ object {
 
 @media screen and (min-width: 475px) and (max-width: 759px) {
 	.widget-container {
-		min-height: 1990px;
+		min-height: 1815px;
 	}
 }
 
 @media screen and (max-width: 474px) {
 	.widget-container {
-		min-height: 2200px;
+		min-height: 2000px;
 	}
 }
 
@@ -2213,7 +2213,7 @@ inherited by the admin bar */
 		text-align: center;
 		clear: both;
 		bottom: 0;
-		top: 450px;
+		top: 465px;
 	}
 }
 
@@ -2275,10 +2275,11 @@ inherited by the admin bar */
 
 @media screen and (max-width: 759px) {
 	.footer_menu_class ul {
-		margin: 5px 0 10px;
+		margin: 25px 0 10px;
 		text-align: center;
 	}
 }
+
 
 /* ----------------------------------
 	15.1 Contact Page Styles
