@@ -15,11 +15,11 @@ get_header(); ?>
 
 <div class="background-container">
 
-	<div class="page-container-blog">
+	<div class="page-container-blog clearfix">
 		
 			<h1 class="aligncenter" id="blogtitle">SMWC BLOG</h1>
 		
-				<div class="blog-posts">
+				<div class="blog-posts clearfix">
 
 				<?php if ( have_posts() ) : ?>
 

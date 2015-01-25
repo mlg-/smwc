@@ -1,36 +1,17 @@
 <?php
 /**
- * The template used for displaying page content in page.php
+ * Template Name: No Sidebar Page
  *
  * @package smwc_withlove
  */
-?>
+
+get_header(); ?>
+
 <div class="background-container" data-type="background" data-speed="10">
 
 	<div class="page-container">
 
 		<article id="post-<?php the_ID(); ?>" <?php post_class( 'clearfix'); ?>>
-			<div class="sidebar">
-			<?php
-			  if($post->post_parent) {
-			  $children = wp_list_pages("title_li=&child_of=".$post->post_parent."&echo=0");
-			  $titlenamer = get_the_title($post->post_parent);
-				$parentlink = get_permalink($post->post_parent);
-							  }
-
-				  else {
-				  $children = wp_list_pages("title_li=&child_of=".$post->ID."&echo=0");
-				  $titlenamer = get_the_title($post->ID);
-				  }
-				  if ($children) { ?>
-
-				  <h2 class="sidebar-title"><a href="<? echo $parentlink; ?>"> <? echo $titlenamer; ?></a> </h2>
-				  <ul class="sidebar-items">
-				  <?php echo $children; ?>
-				  </ul>
-
-				<?php } ?>	
-			</div><!--close sidebar-->
 	
 			<div class="page-content-area">
 				<header class="entry-header">

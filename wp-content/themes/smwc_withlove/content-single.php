@@ -7,7 +7,7 @@
 
 	<div class="page-container">
 
-		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+		<article id="post-<?php the_ID(); ?>" <?php post_class( 'clearfix' ); ?>>
 			<header id="singleblogentryheader">
 						<?php if ( has_post_thumbnail() ) { ?>
 							<div class="featured-post-image">
