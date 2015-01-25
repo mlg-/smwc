@@ -469,7 +469,7 @@ a:active {
 	background-image: url('images/linenlight.png');
 }
 
-header.nav-container {
+header.nav-container { /*landing page nav container */
 	position: relative;
 	background-image: url('images/linenlight.png');
 	min-height: 235px;
@@ -479,16 +479,22 @@ header.nav-container {
 	border-top: 15px solid #4F4F4F;
 }
 
-header.nav-container-inner {
-	position:relative;
+@media screen and (max-width: 759px) {
+	header.nav-container {
+		min-height: 380px;
+	}
+}
+
+header.nav-container-inner { /* inner pages nav container */
+	position: relative;
 	background-image: url('images/linenlight.png');
 	min-height: 130px;
 	width: 100%;
 }
 
 @media screen and (max-width: 759px) {
-	header.nav-container {
-		min-height: 380px;
+	header.nav-container-inner {
+		min-height: 280px;
 	}
 }
 
