@@ -176,14 +176,19 @@ h1 {
 
 h2 {
 	font-size: 24px;
+	color: #C13F46;
+	font-style: bold;
 }
 
 h3 {
 	font-size: 20px;
+	color: #663333;
+	font-style: italic;
 }
 
 h4 {
 	font-size: 18px;
+	color: #4F4F4F;
 }
 
 p {
@@ -756,6 +761,13 @@ header.nav-container-inner { /* inner pages nav container */
 	padding-left: 0;
 	display: inline-block;
 	margin-bottom: 10px;
+}
+
+@media (min-width: 1351px) and (max-width: 1550px) {
+	.main-navigation ul {
+		position: absolute;
+		left: 350px;
+	}
 }
 
 @media (max-width: 1350px) and (min-width: 981px) {
@@ -2065,9 +2077,8 @@ a:hover.srp-post-title-link {
 
 .site-footer {
 	background: #9b242d;
-	min-height: 260px;
+	min-height: 360px;
 	width: 100%;
-	clear: both;
 	padding-top: 10px;
 	margin-left: auto;
 	margin-right: auto;
@@ -2078,7 +2089,7 @@ a:hover.srp-post-title-link {
 	.site-footer {
 		position: relative;
 		height: 100%;
-		min-height: 500px;
+		min-height: 600px;
 	}
 }
 
@@ -2086,7 +2097,7 @@ a:hover.srp-post-title-link {
 	.site-footer {
 		position: relative;
 		top: 0px;
-		min-height: 500px;
+		min-height: 600px;
 		clear:both;
 	}
 }
@@ -2111,7 +2122,7 @@ h1.mission {
 .site-footer ul li {
 	list-style: none;
 	display: inline-block;
-	margin-top: 5%;
+	margin-top: 5px;
 }
 
 .site-footer li {
@@ -2141,6 +2152,10 @@ inherited by the admin bar */
 	text-align: center;
 }
 
+.left-footer-column h1 {
+	font-size: 20px;
+}
+
 @media screen and (min-width: 760px) and (max-width: 1224px) {
 	.left-footer-column {
 		width: 40%;
@@ -2156,6 +2171,9 @@ inherited by the admin bar */
 		margin: auto;
 		padding: 10px 50px;
 	}
+	.left-footer-column h1 {
+		font-size: 16px;
+	}
 }
 
 @media screen and (max-width: 474px) {
@@ -2164,6 +2182,9 @@ inherited by the admin bar */
 		top: 0px;
 		width: 100%;
 		margin: auto;
+	}
+	.left-footer-column h1 {
+		font-size: 14px;
 	}
 }
 
@@ -2205,16 +2226,17 @@ inherited by the admin bar */
 }
 
 .right-footer-column a img {
-	margin-right: auto;
-	margin-left: auto;
-	padding: 6px;
+	margin-left: 35px;
 	display: inline-block;
-	float: center;
+
+}
+
+#tilt {
+	margin-left: 0;
 }
 
 @media screen and (min-width: 760px) and (max-width: 1224px) {
 	.right-footer-column a img {
-		padding: 3px;
 		text-align: center;
 	}
 }
@@ -2240,11 +2262,10 @@ inherited by the admin bar */
 	.site-info {
 		position: relative;
 		width: 100%;
-		float: none;
 		text-align: center;
 		clear: both;
 		bottom: 0;
-		top: 465px;
+		top: 565px;
 	}
 }
 
