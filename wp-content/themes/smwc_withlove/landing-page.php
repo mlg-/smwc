@@ -19,7 +19,7 @@ get_header(); ?>
 					 } ?>
 			</div>
 
-			<div class="widget-container clearfix">
+			<div class="widget-container">
 				<div class="column-left">
 				    
 				    <?php if (function_exists('dynamic_sidebar') && dynamic_sidebar('left_column')) : else : ?>

@@ -129,19 +129,16 @@ a img {
 }
 
 .clearfix:after {
-     visibility: hidden;
-     display: block;
-     font-size: 0;
-     content: " ";
-     clear: both;
-     height: 0;
-     }
-.clearfix { display: inline-block; }
-/* start commented backslash hack \*/
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+    }
+.clearfix { display: inline-table; }
 * html .clearfix { height: 1%; }
 .clearfix { display: block; }
-/* close commented backslash hack */
-
 /*--------------------------------------------------------------
 2.0 Typography
 --------------------------------------------------------------*/
@@ -1733,12 +1730,12 @@ object {
 
 .widget-container {
 	font-kerning: normal;
-	min-height: 800px;
+	height: 100%;
 	padding: 2% 5%;
 	border-left: 15px solid #71151F;
 	border-right: 15px solid #71151F;
 	border-bottom: 15px solid gray;
-	clear: both;
+	overflow: hidden;
 }
 
 @media screen and (min-width: 475px) and (max-width: 759px) {
