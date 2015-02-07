@@ -1290,6 +1290,11 @@ but if they were to be included in the future) */
 .entry-summary {
 }
 
+.padded {
+	padding: 10%;
+	text-align: center;
+}
+
 .page-links {
 	clear: both;
 	margin: 0 0 1.5em;
@@ -1785,6 +1790,10 @@ object {
 	text-align: center;
 	color: #C13F46;
 	text-transform: uppercase;
+}
+
+.widget h3 {
+	font-style: normal;
 }
 
 .widget input[type=email] {
