@@ -48,6 +48,7 @@ function smwc_withlove_setup() {
 	 */
 
 	add_theme_support( 'post-thumbnails' ); 
+	remove_filter('the_content', 'wptexturize');
 
 
 	// This theme uses wp_nav_menu() in one location.
