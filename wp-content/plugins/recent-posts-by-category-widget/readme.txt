@@ -2,7 +2,7 @@
 Contributors: RossC
 Tags: widget, category, categories, recent posts, sidebar
 Requires at least: 3.0.1
-Tested up to: 4.0
+Tested up to: 4.2.4
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -25,6 +25,12 @@ This plugin adds a simple widget that allows you to display a number of recent b
 1. The widget UI
 
 == Changelog ==
+
+= 1.3 =
+* Removed an anonymous function that was breaking sites running PHP 5.2
+
+= 1.2 =
+* Switch to PHP5 style constructors for WP v4.3
 
 = 1.1 =
 * Better use of 'widget_title' filter to allow hooks to be used on it.

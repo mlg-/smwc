@@ -3,7 +3,7 @@
 /*
 Plugin Name: Recent Posts by Category Widget
 Description: Just like the default Recent Posts widget except you can choose a category to pull posts from.
-Version: 1.1
+Version: 1.3
 Author: Ross Cornell
 Author URI: http://www.rosscornell.com
 License: GPL
@@ -22,21 +22,21 @@ function rpjc_register_widget_cat_recent_posts() {
 
 class rpjc_widget_cat_recent_posts extends WP_Widget {
 
-	// Process widget
-
-	function rpjc_widget_cat_recent_posts() {
+	public function __construct() {
 	
-		$widget_ops = array(
-
-			'classname'   => 'rpjc_widget_cat_recent_posts widget_recent_entries',
-			'description' => 'Display recent blog posts from a specific category'
-		
+		parent::__construct(
+	
+			'rpjc_widget_cat_recent_posts',
+			__( 'Recent Posts by Category', 'recent-posts-by-category-widget' ),
+			array(
+				'classname'   => 'rpjc_widget_cat_recent_posts widget_recent_entries',
+				'description' => __( 'Display recent blog posts from a specific category', 'recent-posts-by-category-widget' )
+			)
+	
 		);
-		
-		$this->WP_Widget( 'rpjc_widget_cat_recent_posts', __( 'Recent Posts by Category' ), $widget_ops );
 	
 	}
-	
+
 	// Build the widget settings form
 
 	function form( $instance ) {
@@ -56,7 +56,7 @@ class rpjc_widget_cat_recent_posts extends WP_Widget {
 		</p>
 		
 		<p>
-			<label for="rpjc_widget_cat_recent_posts_username"><?php _e( 'Category' ); ?>:</label>				
+			<label for="rpjc_widget_cat_recent_posts_category"><?php _e( 'Category' ); ?>:</label>				
 			
 			<?php
 
@@ -111,7 +111,7 @@ class rpjc_widget_cat_recent_posts extends WP_Widget {
 
 		echo $before_widget;
 
-		$title     = $title = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
+		$title     = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
 		$category  = $instance['category'];
 		$number    = $instance['number'];
 		$show_date = ( $instance['show_date'] === 1 ) ? true : false;
@@ -145,7 +145,7 @@ class rpjc_widget_cat_recent_posts extends WP_Widget {
 
 		} else {
 
-			echo 'No posts yet...';
+			_e( 'No posts yet.', 'recent-posts-by-category-widget' );
 
 		}
 

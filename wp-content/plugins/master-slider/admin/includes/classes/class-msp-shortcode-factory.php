@@ -1,26 +1,26 @@
 <?php
 
 /**
-* 
+*
 */
 class MSP_Shortcode_Factory {
-	
+
 	public  $parsed_slider_data = array();
 	private $post_id;
 	private $post_slider_args   = array();
 
 	function __construct() {
-		
+
 	}
 
 	public function set_data( $parsed_data ) {
-		
+
 		$this->parsed_slider_data = $parsed_data;
 	}
 
 	/**
 	 * Get generated ms_slider shortcode
-	 * 
+	 *
 	 * @return string  [ms_slider] shortcode or empty string on error
 	 */
 	public function get_ms_slider_shortcode( $the_content = '' ){
@@ -33,9 +33,12 @@ class MSP_Shortcode_Factory {
 		// get the parsed slider setting
 		$setting = $this->parsed_slider_data['setting'];
 
+		$exclude_attrs = array( 'custom_style' );
+
 		// create ms_slider shortcode
 		$attrs = '';
 		foreach ( $setting as $attr => $attr_value ) {
+			if( in_array( $attr, $exclude_attrs ) ){ continue; }
 			$attrs .= sprintf( '%s="%s" ', $attr, esc_attr( $attr_value ) );
 		}
 
@@ -57,21 +60,43 @@ class MSP_Shortcode_Factory {
 		// stores shortcode attributes
 		$attrs = '';
 
+		// the list of attributes which should be excluded from slide shortcode
+		$exclude_slide_attrs = array( 'layers', 'layer_ids', 'ishide', 'info', 'is_overlay_layers' );
+
 		foreach ( $slide as $attr => $attr_value ) {
-			if( 'layers' == $attr || 'layer_ids' == $attr || 'ishide' == $attr )
+
+			if( in_array( $attr, $exclude_slide_attrs ) ){
 				continue;
+			}
 
 			if( 'src' == $attr && in_array( $this->parsed_slider_data['setting']['slider_type'], array( "flickr", "facebook", "instagram" ) ) ) {
 				$attrs .= sprintf( '%s="%s" ', $attr, '{{image}}' );
 
-			} elseif( 'alt' == $attr && in_array( $this->parsed_slider_data['setting']['slider_type'], array( "flickr", "facebook", "instagram" ) ) ) {
-				$attrs .= sprintf( '%s="%s" ', $attr, '{{title}}' );
+			} elseif( 'alt' == $attr || 'title' == $attr ) {
 
-			} elseif( 'title' == $attr && in_array( $this->parsed_slider_data['setting']['slider_type'], array( "flickr", "facebook", "instagram" ) ) ) {
-				$attrs .= sprintf( '%s="%s" ', $attr, '{{title}}' );
+				if( in_array( $this->parsed_slider_data['setting']['slider_type'], array( "flickr", "facebook", "instagram" ) ) ){
+					$attrs .= sprintf( '%s="%s" ', $attr, '{{title}}' );
+				} else {
+					$attrs .= sprintf( '%s="%s" ', $attr, $this->escape_square_brackets( $attr_value ) );
+				}
+
+			// encode backets ([]) to prevent any conflict while generating slider shortcode
+			} elseif( 'link_title' == $attr || 'link_rel' == $attr ) {
+				$attrs .= sprintf( '%s="%s" ', $attr, $this->escape_square_brackets( $attr_value ) );
 
 			} elseif( 'thumb' == $attr && ! empty( $attr_value ) && in_array( $this->parsed_slider_data['setting']['slider_type'], array( "flickr", "facebook", "instagram" ) ) ) {
 				$attrs .= sprintf( '%s="%s" ', $attr, '{{thumb}}' );
+
+			} elseif( 'tab' == $attr ) {
+
+				$tab_content = '<div class="ms-tab-context">' . $attr_value . '</div>';
+
+				// if "insert thumb" option was enabled append the thumbnail tag
+				if( 'true' == $this->parsed_slider_data['setting']['thumbs_in_tab'] ) {
+					$thumb_height  = $this->parsed_slider_data['setting']['thumbs_height'];
+					$tab_content = sprintf( '{{thumb%s}}', $thumb_height ) . $tab_content;
+				}
+				$attrs .= sprintf( '%s="%s" ', $attr, esc_attr( $tab_content ) );
 
 			} else {
 				$attrs .= sprintf( '%s="%s" ', $attr, esc_attr( $attr_value ) );
@@ -87,8 +112,8 @@ class MSP_Shortcode_Factory {
 		$the_content = '';
 
 		// generate slide_info shortcode if slideinfo control is added
-		if( 'image-gallery' == $this->parsed_slider_data['setting']['template'] || 
-		    ( isset( $this->parsed_slider_data['setting']['slideinfo'] ) && 'true' == $this->parsed_slider_data['setting']['slideinfo'] ) 
+		if( 'image-gallery' == $this->parsed_slider_data['setting']['template'] ||
+		    ( isset( $this->parsed_slider_data['setting']['slideinfo'] ) && 'true' == $this->parsed_slider_data['setting']['slideinfo'] )
 		   ){
 			if( ! empty( $slide['info'] ) )
 				$the_content .= $this->get_ms_slide_info_shortcode( $slide['info'] );
@@ -100,23 +125,34 @@ class MSP_Shortcode_Factory {
 	}
 
 
-
-	public function get_ms_slides_shortcode() {
-
-		if( ! isset( $this->parsed_slider_data['slides'] ) )
-			return '';
-
-		$slides = $this->parsed_slider_data['slides'];
-
-		$shortcodes = '';
-
-		foreach ( $slides as $slide ) {
-			if( 'true' != $slide['ishide'] )
-				$shortcodes .= $this->get_ms_slide_shortcode( $slide );
+	public function escape_square_brackets( $context ){
+		if( is_null( $context ) ){
+			return $content;
 		}
 
-		return $shortcodes;
+		return str_replace( array('[', ']'), array( "%5B", "%5D" ), $context );
 	}
+
+
+    public function get_ms_slides_shortcode() {
+
+        if( ! isset( $this->parsed_slider_data['slides'] ) )
+            return '';
+
+        $slides = $this->parsed_slider_data['slides'];
+
+        $shortcodes = '';
+
+        foreach ( $slides as $slide ) {
+            if( ! empty( $slide['ishide'] ) && 'true' != $slide['ishide'] ){
+                if( 'true' != $slide['is_overlay_layers'] ){
+                    $shortcodes .= $this->get_ms_slide_shortcode( $slide );
+                }
+            }
+        }
+
+        return $shortcodes;
+    }
 
 
 
@@ -125,7 +161,9 @@ class MSP_Shortcode_Factory {
 		if( empty( $the_content ) )
 			return '';
 
-		return sprintf( '[%1$s]%2$s[/%1$s]', 'ms_slide_info', $the_content )."\n";
+        $css_class = ( "&nbsp;" == $the_content ) ? 'ms-info-empty' : '';
+
+		return sprintf( '[%1$s css_class="%3$s"]%2$s[/%1$s]', 'ms_slide_info', $the_content, $css_class )."\n";
 	}
 
 
@@ -135,7 +173,7 @@ class MSP_Shortcode_Factory {
 
 		$tag_name = preg_replace('/[{}]/', '', $matches['0'] );
 		$tag_name = msp_get_template_tag_value( $tag_name, $this->post_id, $this->post_slider_args );
-		
+
 		return is_array( $tag_name ) ? implode( ',', $tag_name ) : $tag_name;
 	}
 

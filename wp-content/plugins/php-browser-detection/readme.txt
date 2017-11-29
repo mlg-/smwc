@@ -2,9 +2,9 @@
 Contributors: mindshare, MartyThornley
 Donate link: http://mind.sh/are/donate/
 Tags: php, browser detection, browser, internet explorer, iphone, mobile, browscap, detection
-Version: 3.1.2
-Tested up to: 4.0
-Stable tag: 3.1.2
+Version: 3.1.8
+Tested up to: 4.3
+Stable tag: 3.1.8
 
 PHP Browser Detection is a WordPress plugin used to detect a user's browser. Please report any bugs on the support forums.
 
@@ -81,6 +81,21 @@ Get the full version number - 3.2, 5.0, etc...
 
 `<?php $browser_info = php_browser_info(); ?>`
 
+**Shortcodes:**
+
+*Test for specific browsers:*
+
+`
+[is_browser name="chrome" version="45"]
+<p>You are using Chrome 45 or above.</p>
+[/is_browser]
+`
+
+*Output all browser info:*
+`
+[browser_info]
+`
+
 == Installation ==
 
 1. Automatically install through the Plugin Browser or...
@@ -89,11 +104,41 @@ Get the full version number - 3.2, 5.0, etc...
 
 == Frequently Asked Questions ==
 
+= PHP Browser Detection is reporting the version of Chrome (or any pother browser) as "0.0" =
+
+This means the local cached copy of the browscap.ini user agent database is out of date. You can fix this by updating the file yourself manually, or wait for a new release of the plugin. To update the file, download the most recent version here: http://browscap.org/stream?q=PHP_BrowsCapINI and save it over the one bundled with the plugin `php-browser-detection/cache/browscap.ini`
+
 = I got a fatal error on activation. What gives? =
 
 This most likely means your web host is running a very old version of PHP. As of version 3.0, only PHP 5.3 and above are supported. You can ask your host to upgrade PHP for you.
 
 == Changelog ==
+
+= 3.1.8 =
+* Add missing include file
+* Confirm filters aren't working (needs refactor)
+
+= 3.1.7 =
+* Added shortcodes
+
+= 3.1.6 =
+* Bugfix for 3.1.5
+
+= 3.1.5 =
+* Updated Browscap to 2.0.5
+* Re-enable auto-updates
+* Added filter to turn off auto updates for host with low memory.
+* Added FAQ about manually updating.
+* Added global variable for `$browser_info = php_browser_info();`
+
+= 3.1.4 =
+* Updated default browscap.ini
+
+= 3.1.3 =
+* Updated default browscap.ini
+* Migrated Browscap.php to use asgrim's fork
+* Added ID param for tests
+
 
 = 3.1.2 =
 * Disabled auto updates because of memory problems

@@ -1,24 +1,36 @@
+<?php
+// Prevent direct access
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 'This plugin requires WordPress' );
+}
+?>
 
-<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>" class="wrap npc-settings">
+<form method="post" action="<?php echo esc_url( $_SERVER['REQUEST_URI'] ); ?>" class="wrap npc-settings">
+
+<?php
+// Add nonce to prevent CSRF
+wp_nonce_field( 'sta_npc_csrf_nonce' );
+$nonce = ( isset( $_REQUEST['_wpnonce'] ) ) ? $_REQUEST['_wpnonce'] : false;
+?>
 
 <?php
 // Prints out the admin settings page
-$sta_npc_nonce = wp_create_nonce('sta_npc_nonce');
+$sta_npc_nonce = wp_create_nonce( 'sta_npc_nonce' );
 $sta_npc_options = $this->sta_npc_get_admin_options();
 
-if ( isset($_POST['update_sta_npc_plugin_settings']) ) {
+if ( wp_verify_nonce( $nonce, 'sta_npc_csrf_nonce' ) && isset( $_POST['update_sta_npc_plugin_settings'] ) ) {
 
-	foreach ( get_post_types('','objects') as $posttype ) {
+	foreach ( get_post_types( '', 'objects' ) as $posttype ) {
 		if ( in_array( $posttype->name, $this->excluded_posttypes ) )
 			continue;
 
-		if ( isset($_POST['sta_npc_disable_comments_' . $posttype->name]) ) {
+		if ( isset( $_POST['sta_npc_disable_comments_' . $posttype->name] ) ) {
 			$sta_npc_options['disable_comments_' . $posttype->name] = $_POST['sta_npc_disable_comments_' . $posttype->name];
 		} else {
 			$sta_npc_options['disable_comments_' . $posttype->name] = 'false';
 		}
 
-		if ( isset($_POST['sta_npc_disable_trackbacks_' . $posttype->name]) ) {
+		if ( isset( $_POST['sta_npc_disable_trackbacks_' . $posttype->name] ) ) {
 			$sta_npc_options['disable_trackbacks_' . $posttype->name] = $_POST['sta_npc_disable_trackbacks_' . $posttype->name];
 		} else {
 			$sta_npc_options['disable_trackbacks_' . $posttype->name] = 'false';
@@ -97,14 +109,14 @@ if ( isset($_POST['update_sta_npc_plugin_settings']) ) {
 			<div id="postbox-container-1" class="postbox-container">
 				<div class="meta-box-sortables">
 
-					<div class="postbox">
+					<?php /*<div class="postbox">
 						<h3 style="cursor:default;"><span><?php _e('Other plugins by', $this->plugin_domain ); ?> <a href="http://sethalling.com/" title="Seth Alling" style="font-size:15px;">Seth Alling</a>:</span></h3>
 						<div class="inside">
 							<ul>
 								<li style="padding:5px 0;"><a href="http://sethalling.com/plugins/wordpress/wp-faqs-pro" title="WP FAQs Pro" target="_blank">WP FAQs Pro</a></li>
 							</ul>
 						</div>
-					</div>
+					</div>*/ ?>
 
 					<div class="postbox">
 						<h3 style="cursor:default;"><span><?php _e('Support No Page Comment:', $this->plugin_domain ); ?></span></h3>
@@ -123,10 +135,10 @@ if ( isset($_POST['update_sta_npc_plugin_settings']) ) {
 						<h3 style="cursor:default;"><span><?php _e('Translation Thanks:', $this->plugin_domain ); ?></span></h3>
 						<div class="inside">
 							<ul>
-								<li style="padding:5px 0;"><a href="http://www.webhostinghub.com/" title="Maria Ramos, WebHostingHub" target="_blank">Maria Ramos, WebHostingHub</a></li>
-								<li style="padding:5px 0;"><a href="http://firstsiteguide.com/" title="firstsiteguide.com" target="_blank">firstsiteguide.com</a></li>
-								<li style="padding:5px 0;"><a href="http://adevade.com/" title="Andréas Lundgren" target="_blank">Andréas Lundgren</a></li>
-								<li style="padding:5px 0;"><a href="http://www.fravaco.be/" title="Fravaco" target="_blank">Fravaco</a></li>
+								<li style="padding:5px 0;"><?php _e('Dutch and Italian:', $this->plugin_domain ); ?> <a href="http://www.fravaco.be/" title="Fravaco" target="_blank">Fravaco</a></li>
+								<li style="padding:5px 0;"><?php _e('Serbian:', $this->plugin_domain ); ?> <a href="http://firstsiteguide.com/" title="firstsiteguide.com" target="_blank">firstsiteguide.com</a></li>
+								<li style="padding:5px 0;"><?php _e('Spanish:', $this->plugin_domain ); ?> <a href="http://www.webhostinghub.com/" title="Maria Ramos, WebHostingHub" target="_blank">Maria Ramos, WebHostingHub</a></li>
+								<li style="padding:5px 0;"><?php _e('Swedish:', $this->plugin_domain ); ?> <a href="http://adevade.com/" title="Andréas Lundgren" target="_blank">Andréas Lundgren</a></li>
 							</ul>
 						</div>
 					</div>

@@ -3,14 +3,16 @@
 function sdm_generate_fancy0_latest_downloads_display_output($get_posts, $args) {
 
     $output = "";
+    isset($args['button_text']) ? $button_text = $args['button_text'] : $button_text = '';
+    isset($args['new_window']) ? $new_window = $args['new_window'] : $new_window = '';
     foreach ($get_posts as $item) {
         $id = $item->ID;  //Get the post ID
         //Create a args array
         $args = array(
             'id' => $id,
             'fancy' => '0',
-            'button_text' => $args['button_text'],
-            'new_window' => $args['new_window'],
+            'button_text' => $button_text,
+            'new_window' => $new_window,
         );
         $output .= sdm_generate_fancy0_display_output($args);
     }
@@ -18,7 +20,8 @@ function sdm_generate_fancy0_latest_downloads_display_output($get_posts, $args) 
     return $output;
 }
 
-/*** TODO - Use this function in the category shortcode handler function ***/
+/* * * TODO - Use this function in the category shortcode handler function ** */
+
 //function sdm_generate_fancy0_category_display_output($get_posts, $args) {
 //
 //    $output = "";
@@ -58,7 +61,7 @@ function sdm_generate_fancy0_display_output($args) {
     // See if user color option is selected
     $main_opts = get_option('sdm_downloads_options');
     $color_opt = $main_opts['download_button_color'];
-    $def_color = isset($color_opt) ? str_replace(' ', '', strtolower($color_opt)) : __('green', 'sdm_lang');
+    $def_color = isset($color_opt) ? str_replace(' ', '', strtolower($color_opt)) : __('green', 'simple-download-monitor');
 
     //See if new window parameter is seet
     $window_target = '';
@@ -69,12 +72,12 @@ function sdm_generate_fancy0_display_output($args) {
     //Get the download button text
     $button_text = isset($args['button_text']) ? $args['button_text'] : '';
     if (empty($button_text)) {//Use the default text for the button
-        $button_text_string = __('Download Now!', 'sdm_lang');
+        $button_text_string = __('Download Now!', 'simple-download-monitor');
     } else {//Use the custom text
         $button_text_string = $button_text;
     }
 
-   // Get CPT title
+    // Get CPT title
     $item_title = get_the_title($id);
     $isset_item_title = isset($item_title) && !empty($item_title) ? $item_title : '';
 
@@ -87,7 +90,7 @@ function sdm_generate_fancy0_display_output($args) {
     $get_cpt_object = get_post($id);
     $cpt_is_password = !empty($get_cpt_object->post_password) ? 'yes' : 'no';  // yes = download is password protected;    
     if ($cpt_is_password !== 'no') {//This is a password protected download so replace the download now button with password requirement
-        $download_button_code = sdm_get_password_entry_form($id);
+        $download_button_code = sdm_get_password_entry_form($id, $args, 'sdm_download ' . $def_color);
     }
 
     $output = "";

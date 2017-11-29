@@ -1,5 +1,20 @@
-#import-form .spinner {
+#import-form .spinner.fbps-spinner {
 	float: left;
+}
+
+.spinner.fbps-spinner {
+	visibility: visible;
+	margin-top: 0;
+}
+
+.fbps-row {
+	width: 48%;
+	padding-right: 2%;
+	float: left;
+}
+
+.fbps-enabled {
+	display: none;
 }
 
 #fbps-page-album-list li,
@@ -51,4 +66,13 @@ a.fbps-image-sample {
 .fbps-options {
 	margin-left: 85px;
 	margin-right: 10px;
+}
+
+.fbps-counter {
+	display: none;
+}
+
+#fbps-app img {
+	float: left;
+	margin-right: 5px;
 }

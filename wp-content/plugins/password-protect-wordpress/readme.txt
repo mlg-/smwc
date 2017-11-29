@@ -1,12 +1,11 @@
 === Password Protect Wordpress ===
-Contributors: volcanicpixels
-Donate link: http://www.spiders-design.co.uk/donate/
+Contributors: volcanicpixels, danielchatfield
 Tags: password,protect,password protect,wordpress,blog, security
 Requires at least: 3.3.1
-Tested up to: 3.8
-Stable tag:  5.0.3
+Tested up to: 4.7
+Stable tag:  5.1.2
 
-This plugin password protects your wordpress blog with a single password.
+This plugin password protects your WordPress blog with a single password.
 
 == Description ==
 
@@ -60,6 +59,18 @@ This section describes how to install the plugin and get it working.
 2. Change the CSS styles for the login page to get the look and feel right
 
 == Changelog ==
+
+= 5.1.0 =
+
+* WordPress 4.6 compatibility
+
+= 5.0.6 =
+
+* WordPress 4.4 compatibility
+
+= 5.0.4 =
+
+* Fixed issue with secure assets
 
 = 5.0.3 =
 

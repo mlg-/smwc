@@ -4,7 +4,7 @@ Plugin Name: Safe Redirect Manager
 Plugin URI: http://www.10up.com
 Description: Easily and safely manage HTTP redirects.
 Author: Taylor Lovett (10up)
-Version: 1.7.5
+Version: 1.7.8
 Author URI: http://www.10up.com
 
 GNU General Public License, Free Software Foundation <http://creativecommons.org/licenses/GPL/2.0/>
@@ -152,18 +152,25 @@ class SRM_Safe_Redirect_Manager {
         if ( empty( $wp_query ) || $this->redirect_post_type != get_query_var( 'post_type' ) || ! is_search() || empty( $where ) )
             return $where;
 
+        $terms = $this->get_search_terms();
+
+        if ( empty( $terms ) ) {
+            return $where;
+        }
+
         $exact = get_query_var( 'exact' );
         $n = ( ! empty( $exact ) ) ? '' : '%';
 
         $search = '';
         $seperator = '';
-        $terms = $this->get_search_terms();
         $search .= '(';
 
         // we check the meta values against each term in the search
         foreach ( $terms as $term ) {
             $search .= $seperator;
-            $search .= sprintf( "( ( m.meta_value LIKE '%s%s%s' AND m.meta_key = '%s') OR ( m.meta_value LIKE '%s%s%s' AND m.meta_key = '%s') )", $n, $term, $n, $this->meta_key_redirect_from, $n, $term, $n, $this->meta_key_redirect_to );
+            // Used esc_sql instead of wpdb->prepare since wpdb->prepare wraps things in quotes
+            $search .= sprintf( "( ( m.meta_value LIKE '%s%s%s' AND m.meta_key = '%s') OR ( m.meta_value LIKE '%s%s%s' AND m.meta_key = '%s') )", $n, esc_sql( $term ), $n, esc_sql( $this->meta_key_redirect_from ), $n, esc_sql( $term ), $n, esc_sql( $this->meta_key_redirect_to ) );
+            
             $seperator = ' OR ';
         }
 
@@ -583,6 +590,7 @@ class SRM_Safe_Redirect_Manager {
             'edit_post' => $redirect_capability,
             'read_post' => $redirect_capability,
             'delete_post' => $redirect_capability,
+            'delete_posts' => $redirect_capability,
             'edit_posts' => $redirect_capability,
             'edit_others_posts' => $redirect_capability,
             'publish_posts' => $redirect_capability,
@@ -635,7 +643,7 @@ class SRM_Safe_Redirect_Manager {
         $status_code = get_post_meta( $post->ID, $this->meta_key_redirect_status_code, true );
         $enable_regex = get_post_meta( $post->ID, $this->meta_key_enable_redirect_from_regex, true );
         if ( empty( $status_code ) )
-            $status_code = 302;
+            $status_code = apply_filters( 'srm_default_direct_status', 302 );
         ?>
         <p>
             <label for="srm<?php echo $this->meta_key_redirect_from; ?>"><?php _e( 'Redirect From:', 'safe-redirect-manager' ); ?></label><br />
@@ -805,9 +813,9 @@ class SRM_Safe_Redirect_Manager {
          * If WordPress resides in a directory that is not the public root, we have to chop
          * the pre-WP path off the requested path.
          */
-        $parsed_site_url = parse_url( site_url() );
-        if ( isset( $parsed_site_url['path'] ) && '/' != $parsed_site_url['path'] ) {
-            $requested_path = preg_replace( '@' . $parsed_site_url['path'] . '@i', '', $requested_path, 1 );
+        $parsed_home_url = parse_url( home_url() );
+        if ( isset( $parsed_home_url['path'] ) && '/' != $parsed_home_url['path'] ) {
+            $requested_path = preg_replace( '@' . $parsed_home_url['path'] . '@i', '', $requested_path, 1 );
         }
 
         // Allow redirects to be filtered
@@ -833,6 +841,10 @@ class SRM_Safe_Redirect_Manager {
             $redirect_to = $redirect['redirect_to'];
             $status_code = $redirect['status_code'];
             $enable_regex = ( isset( $redirect['enable_regex'] ) ) ? $redirect['enable_regex'] : false;
+
+			// check if the redirection destination is valid, otherwise just skip it
+	    if ( empty( $redirect_to ) )
+		continue;
 
             // check if requested path is the same as the redirect from path
             if ( $enable_regex ) {
@@ -977,6 +989,80 @@ class SRM_Safe_Redirect_Manager {
 
         return home_url( $redirect_from );
     }
+
+	/**
+	 * Imports redirects from CSV file or stream.
+	 *
+	 * @since 1.7.6
+	 *
+	 * @access public
+	 * @param string|resource $file File path, file pointer or stream to read redirects from.
+	 * @param array $args The array of arguments. Includes column mapping and CSV settings.
+	 * @return array Returns importing statistic on success, otherwise FALSE.
+	 */
+	public function import_file( $file, $args ) {
+		$handle = $file;
+		$close_handle = false;
+		$doing_wp_cli = defined( 'WP_CLI' ) && WP_CLI;
+
+		// filter arguments
+		$args = apply_filters( 'srm_import_file_args', $args );
+
+		// enable line endings auto detection
+		@ini_set( 'auto_detect_line_endings', true );
+
+		// open file pointer if $file is not a resource
+		if ( ! is_resource( $file ) ) {
+			$handle = fopen( $file, 'rb' );
+			if ( ! $handle ) {
+				$doing_wp_cli && WP_CLI::error( sprintf( "Error retrieving %s file", basename( $file ) ) );
+				return false;
+			}
+
+			$close_handle = true;
+		}
+
+		// process all rows of the file
+		$created = $skipped = 0;
+		$headers = fgetcsv( $handle );
+		while( ( $row = fgetcsv( $handle ) ) ) {
+			// validate
+			$rule = array_combine( $headers, $row );
+			if ( empty( $rule[$args['source']] ) || empty( $rule[$args['target']] ) ) {
+				$doing_wp_cli && WP_CLI::warning( "Skipping - redirection rule is formatted improperly." );
+				$skipped++;
+				continue;
+			}
+
+			// sanitize
+			$redirect_from = $this->sanitize_redirect_from( $rule[$args['source']] );
+			$redirect_to = $this->sanitize_redirect_to( $rule[$args['target']] );
+			$status_code = ! empty( $rule[$args['code']] ) ? $rule[$args['code']] : 302;
+			$regex = ! empty( $rule[$args['regex']] ) ? filter_var( $rule[$args['regex']], FILTER_VALIDATE_BOOLEAN ) : false;
+
+			// import
+			$id = $this->create_redirect( $redirect_from, $redirect_to, $status_code, $regex );
+			if ( is_wp_error( $id ) ) {
+				$doing_wp_cli && WP_CLI::warning( $id );
+				$skipped++;
+			} else {
+				$doing_wp_cli && WP_CLI::line( "Success - Created redirect from '{$redirect_from}' to '{$redirect_to}'" );
+				$created++;
+			}
+		}
+
+		// close an open file pointer if we've opened it
+		if ( $close_handle ) {
+			fclose( $handle );
+		}
+
+		// return result statistic
+		return array(
+			'created' => $created,
+			'skipped' => $skipped,
+		);
+	}
+
 }
 
 global $safe_redirect_manager;

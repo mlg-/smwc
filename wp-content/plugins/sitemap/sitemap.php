@@ -3,7 +3,7 @@
 Plugin Name: Sitemap
 Plugin URI: http://wordpress.org/plugins/page-list/
 Description: [pagelist], [subpages], [siblings] and [pagelist_ext] shortcodes
-Version: 4.2
+Version: 4.3
 Author: webvitaly
 Author URI: http://web-profile.com.ua/wordpress/plugins/
 License: GPLv3
@@ -11,13 +11,13 @@ License: GPLv3
 
 if ( !function_exists('pagelist_unqprfx_add_stylesheet') ) {
 	function pagelist_unqprfx_add_stylesheet() {
-		wp_enqueue_style( 'page-list-style', plugins_url( '/css/page-list.css', __FILE__ ), false, '4.2', 'all' );
+		wp_enqueue_style( 'page-list-style', plugins_url( '/css/page-list.css', __FILE__ ), false, '4.3', 'all' );
 	}
-	add_action('wp_print_styles', 'pagelist_unqprfx_add_stylesheet');
+	add_action('wp_enqueue_scripts', 'pagelist_unqprfx_add_stylesheet');
 }
 
 
-$pagelist_unqprfx_powered_line = "\n".'<!-- Page-list plugin v.4.2 wordpress.org/plugins/page-list/ -->'."\n";
+$pagelist_unqprfx_powered_line = "\n".'<!-- Page-list plugin v.4.3 wordpress.org/plugins/page-list/ -->'."\n";
 
 
 if ( !function_exists('pagelist_unqprfx_shortcode') ) {
@@ -515,14 +515,17 @@ if ( !function_exists('pagelist_unqprfx_get_first_image') ) {
 	}
 }
 
-if ( !function_exists('pagelist_unqprfx_plugin_meta') ) {
-	function pagelist_unqprfx_plugin_meta( $links, $file ) { // add 'Plugin page' and 'Donate' links to plugin meta row
-		if ( strpos( $file, 'sitemap.php' ) !== false ) {
-			$links = array_merge( $links, array( '<a href="http://web-profile.com.ua/wordpress/plugins/page-list/" title="Plugin page">Page-list</a>' ) );
-			$links = array_merge( $links, array( '<a href="http://web-profile.com.ua/donate/" title="Support the development">Donate</a>' ) );
-			$links = array_merge( $links, array( '<a href="http://codecanyon.net/popular_item/by_category?category=wordpress&ref=webvitaly">WordPress Pro plugins</a>' ) );
+if ( ! function_exists('pagelist_unqprfx_plugin_meta') ) {
+	function pagelist_unqprfx_plugin_meta( $links, $file ) { // add links to plugin meta row
+		if ( $file == plugin_basename( __FILE__ ) ) {
+			$row_meta = array(
+				'support' => '<a href="http://web-profile.com.ua/wordpress/plugins/page-list/" target="_blank"><span class="dashicons dashicons-editor-help"></span> Page-list</a>',
+				'donate' => '<a href="http://web-profile.com.ua/donate/" target="_blank"><span class="dashicons dashicons-heart"></span> Donate</a>',
+				'pro' => '<a href="http://codecanyon.net/item/silver-bullet-pro/15171769?ref=webvitalii" target="_blank" title="Speedup and protect WordPress in a smart way"><span class="dashicons dashicons-star-filled"></span> ' . __( 'Silver Bullet Pro', 'page-list' ) . '</a>'
+			);
+			$links = array_merge( $links, $row_meta );
 		}
-		return $links;
+		return (array) $links;
 	}
 	add_filter( 'plugin_row_meta', 'pagelist_unqprfx_plugin_meta', 10, 2 );
 }

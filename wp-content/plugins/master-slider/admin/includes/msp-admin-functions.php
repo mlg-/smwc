@@ -23,16 +23,16 @@ function msp_get_sliders_custom_css( $slider_status = 'published' ) {
 	$sliders_result = $mspdb->get_sliders( 0, 0, 'ID', 'DESC', $slider_status );
 
 	$sliders_custom_css = array();
-	
+
 	if( $sliders_result ) {
 		foreach ( $sliders_result as $slider ) {
-			$sliders_custom_css[] = $slider['custom_styles'];
 			$sliders_custom_css[] = msp_get_slider_background_css( $slider['ID'] );
+			$sliders_custom_css[] = $slider['custom_styles'];
 		}
 		// remove empty records from array
 		$sliders_custom_css = array_filter( $sliders_custom_css );
 	}
-	
+
 	return apply_filters( 'masterslider_get_sliders_custom_css', implode( "\n", $sliders_custom_css ), $sliders_custom_css, $sliders_result );
 }
 
@@ -49,9 +49,9 @@ function msp_get_slider_background_css( $slider_id ) {
 	$slider_data = get_masterslider_parsed_data( $slider_id );
 
 	$the_slider_bg  = empty( $slider_data['setting']['bg_color'] ) ? '' : $slider_data['setting']['bg_color'];
-	$the_slider_bg .= empty( $slider_data['setting']['bg_image'] ) ? '' : sprintf( ' url( %s ) repeat top left', msp_get_the_absolute_media_url( $slider_data['setting']['bg_image'] ) ); 
-	$the_slider_bg  = empty( $the_slider_bg ) ? '' : 'background:' . $the_slider_bg . ";"; 
-	
+	$the_slider_bg .= empty( $slider_data['setting']['bg_image'] ) ? '' : sprintf( ' url( %s ) repeat top left', msp_get_the_absolute_media_url( $slider_data['setting']['bg_image'] ) );
+	$the_slider_bg  = empty( $the_slider_bg ) ? '' : 'background:' . $the_slider_bg . ";";
+
 	return empty( $the_slider_bg ) ? '' : sprintf( ".ms-parent-id-%d > .master-slider{ %s }", $slider_id, $the_slider_bg );
 }
 
@@ -66,16 +66,16 @@ function msp_get_all_custom_css () {
 /**
  * Get custom styles and store them in custom.css file or use inline css fallback
  * This function will be called by masterslider save handler
- * 
+ *
  * @return void
  */
 function msp_save_custom_styles() {
-    
+
     $uploads   = wp_upload_dir();
-	
+
 	$css_dir   = apply_filters( 'masterslider_custom_css_dir', $uploads['basedir'] . '/' . MSWP_SLUG );
 	$css_file  = $css_dir . '/custom.css';
-    
+
     $css_terms = "/*
 ===============================================================
  # CUSTOM CSS
@@ -86,12 +86,15 @@ function msp_save_custom_styles() {
     // Get all custom css styles
     $css = msp_get_all_custom_css();
 
-    // write to custom.css file
-    require_once( ABSPATH . 'wp-admin/includes/file.php' );
-
-    WP_Filesystem();
+    /**
+     * Initialize the WP_Filesystem
+     */
     global $wp_filesystem;
-    
+    if ( empty( $wp_filesystem ) ) {
+        require_once ( ABSPATH.'/wp-admin/includes/file.php' );
+        WP_Filesystem();
+    }
+
     if ( wp_mkdir_p( $css_dir ) && ! $wp_filesystem->put_contents( $css_file, $css_terms.$css, 0644 ) ) {
         // if the directory is not writable, try inline css fallback
         msp_update_option( 'custom_inline_style' , $css ); // save css rules as option to print as inline css
@@ -105,14 +108,163 @@ function msp_save_custom_styles() {
 }
 
 
+/**
+ * Retrieves a URL using the HTTP GET method
+ *
+ * @return mixed|boolean    The body content
+ */
+function msp_remote_post( $url, $args = array() ) {
+    $request = wp_remote_get( $url, $args );
+
+    if ( ! is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) === 200 ) {
+        return $request['body'];
+    }
+    return false;
+}
+
+function msp_get_ad_info(){
+
+    if( false !== $result = get_transient( 'master-slider-cached-remote-info' ) ){
+        return $result;
+    }
+
+    $result = array(
+        'popup_image_src'     => MSWP_AVERTA_ADMIN_URL.'/assets/images/thirdparty/phlox-popup.png',
+        'popup_link'          => 'http://avt.li/phmslpu',
+        'popup_ac_btn_label'  => __( 'Get it Now', MSWP_TEXT_DOMAIN ),
+        'topcorner_image_src' => MSWP_AVERTA_ADMIN_URL.'/assets/images/thirdparty/phlox-badge.png',
+        'topcorner_link'      => 'http://avt.li/phmsltbtn',
+        'revision'            => '0.10'
+    );
+
+    if( false === $info = msp_remote_post( 'http://cdn.averta.net/project/masterslider/free/info/info.json' ) ){
+        return $result;
+    } else {
+        $info = json_decode( $info, true );
+    }
+
+    if( ! empty( $info["master-slider"]["revision"] ) ){
+        $result['revision'] = $info["master-slider"]["revision"];
+    }
+
+    if( ! empty( $info["master-slider"]["popupBanner"]["media"] ) ){
+        $result['popup_image_src'] = $info["master-slider"]["popupBanner"]["media"];
+    }
+    if( ! empty( $info["master-slider"]["popupBanner"]["link"] ) ){
+        $result['popup_link'] = $info["master-slider"]["popupBanner"]["link"];
+    }
+    if( ! empty( $info["master-slider"]["popupBanner"]["btn_label"] ) ){
+        $result['popup_ac_btn_label'] = $info["master-slider"]["popupBanner"]["btn_label"];
+    }
+
+    if( ! empty( $info["master-slider"]["topCornerBanner"]["media"] ) ){
+        $result['topcorner_image_src'] = $info["master-slider"]["topCornerBanner"]["media"];
+    }
+    if( ! empty( $info["master-slider"]["topCornerBanner"]["link"] ) ){
+        $result['topcorner_link'] = $info["master-slider"]["topCornerBanner"]["link"];
+    }
+
+    if( ! empty( $result['revision'] ) && $result['revision'] !== $prev_revision = get_transient( 'master-slider-cached-remote-info-revision' ) ){
+        delete_transient( 'masterslider_display_phlox_notice' );
+        Set_transient( 'master-slider-cached-remote-info-revision', $result['revision'], YEAR_IN_SECONDS );
+    }
+
+    set_transient( 'master-slider-cached-remote-info', $result, DAY_IN_SECONDS );
+
+    return $result;
+}
 
 
+/**
+ * Get total number of downloads by item slug
+ *
+ * @param  string $remote_url Remote URL to retrieve data from
+ * @param  array  $body_args  Parameters to pass to the remote API address
+ *
+ * @return array|string       The API response
+ */
+function msp_get_averta_remote_api_data( $remote_url, $body_args ){
+    $args = array(
+        'timeout'    => ( ( defined('DOING_CRON') && DOING_CRON ) ? 30 : 10 ),
+        'body'       => $body_args
+    );
+
+    $request = wp_remote_get( $remote_url, $args );
+
+    if ( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) !== 200 ) {
+        return '...';
+    }
+
+    return $request['body'];
+}
 
 
+/**
+ * A shortcode to retrieve data from API
+ *
+ * @return string
+ */
+function msp_api_stats_shortcode( $atts , $content = null ) {
+
+    // parse attributes
+    $atts = shortcode_atts(
+        array(
+            'branch'            => 'envato',
+            'group'             => 'items',
+            'cat'               => 'info',
+            'action'            => 'stats',
+            'item-id'           => '', // item id
+            'item-name'         => '', // item name or slug
+            'item-param'        => 'number_of_sales', // item param
+            'format'            => '',
+            'cache_in_minutes'  => 0
+        ),
+        $atts,
+        'averta-api'
+    );
+
+    if( empty( $atts['item-id'] ) && empty( $atts['item-name'] ) ){
+        return 'item-id or item-name is required';
+    }
+
+    // sanitize the cache period
+    $atts['cache_in_minutes'] = is_numeric( $atts['cache_in_minutes'] ) ? (int) $atts['cache_in_minutes'] : 180;
+
+    // create a transient id base on the passed options
+    $options_string_id = implode( '_' , $atts );
+
+    if( $atts['cache_in_minutes'] > 0 && false !== ( $result = get_transient( $options_string_id ) ) ){
+        return $result;
+    }
 
 
+    // request data
+    $remote_url   = 'http://api.averta.net/';
+    $request_args = $atts;
+    unset( $request_args['cache_in_minutes'] );
+
+    $result = msp_get_averta_remote_api_data( $remote_url, $request_args );
+    $result = apply_filters( 'auxin_averta_api_shortcode_result', $result, $atts );
+
+    if( $atts['cache_in_minutes'] > 0 ){
+        set_transient( $options_string_id, $result, $atts['cache_in_minutes'] * MINUTE_IN_SECONDS );
+    }
+
+    return $result;
+}
+
+add_shortcode( 'msp-stats', 'msp_api_stats_shortcode' );
 
 
+/**
+ * Get the number of PRO users
+ *
+ * @return int
+ */
+function msp_get_pro_users_num(){
+    $download_num = msp_api_stats_shortcode( array( 'item-id' => '7467925' ) );
+    return number_format_i18n( floor( ($download_num/1000) ) * 1000 ). '+';
+}
 
 
 /**
@@ -130,7 +282,7 @@ if ( ! function_exists( 'axpp' ) ) {
 		} elseif ( $dump ) {
 			echo '<pre>'; var_dump( $expression ); echo '</pre>';
 		} else {
-			echo '<pre>'; print_r ( $expression ); echo '</pre>';
+			echo '<pre style="margin-left:170px;">'; print_r ( $expression ); echo '</pre>';
 		}
 		return true;
 	}

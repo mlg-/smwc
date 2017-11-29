@@ -1,16 +1,12 @@
 <?php
 /**
- * admin.php
+ * admin.php - stuff for WordPress admin only
  *
- * Stuff for WordPress admin only
- * 
- * @created 4/29/14 4:36 PM
- * @author Mindshare Studios, Inc.
+ * @created   4/29/14 4:36 PM
+ * @author    Mindshare Studios, Inc.
  * @copyright Copyright (c) 2014
- * @link http://www.mindsharelabs.com/documentation/
- * 
+ * @link      http://www.mindsharelabs.com/documentation/
  */
-
 
 /**
  * Add links to the plugins screen
@@ -20,13 +16,13 @@
  *
  * @return array
  */
-if(is_admin()) {
-	if(!empty($GLOBALS['pagenow']) && $GLOBALS['pagenow'] == sprintf('%s.php', 'plugins')) {
+if (is_admin()) {
+	if (!empty($GLOBALS['pagenow']) && $GLOBALS['pagenow'] == sprintf('%s.php', 'plugins')) {
 		add_filter('plugin_row_meta', 'php_browser_detection_plugin_links', 10, 2);
 	}
 }
 function php_browser_detection_plugin_links($data, $page) {
-	if($page == plugin_basename(__FILE__)) {
+	if ($page == plugin_basename(__FILE__)) {
 		$data = array_merge(
 			$data,
 			array(
@@ -41,5 +37,6 @@ function php_browser_detection_plugin_links($data, $page) {
 			)
 		);
 	}
+
 	return $data;
 }

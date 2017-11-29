@@ -15,7 +15,11 @@ class WPCF7_Submission {
 
 	private function __construct() {}
 
-	public static function get_instance( WPCF7_ContactForm $contact_form = null ) {
+	public static function get_instance( WPCF7_ContactForm $contact_form = null, $args = '' ) {
+		$args = wp_parse_args( $args, array(
+			'skip_mail' => false,
+		) );
+
 		if ( empty( self::$instance ) ) {
 			if ( null == $contact_form ) {
 				return null;
@@ -23,7 +27,7 @@ class WPCF7_Submission {
 
 			self::$instance = new self;
 			self::$instance->contact_form = $contact_form;
-			self::$instance->skip_mail = $contact_form->in_demo_mode();
+			self::$instance->skip_mail = (bool) $args['skip_mail'];
 			self::$instance->setup_posted_data();
 			self::$instance->submit();
 		} elseif ( null != $contact_form ) {
@@ -31,6 +35,10 @@ class WPCF7_Submission {
 		}
 
 		return self::$instance;
+	}
+
+	public static function is_restful() {
+		return defined( 'REST_REQUEST' ) && REST_REQUEST;
 	}
 
 	public function get_status() {
@@ -71,8 +79,10 @@ class WPCF7_Submission {
 
 	private function setup_posted_data() {
 		$posted_data = (array) $_POST;
+		$posted_data = array_diff_key( $posted_data, array( '_wpnonce' => '' ) );
+		$posted_data = $this->sanitize_posted_data( $posted_data );
 
-		$tags = $this->contact_form->form_scan_shortcode();
+		$tags = $this->contact_form->scan_form_tags();
 
 		foreach ( (array) $tags as $tag ) {
 			if ( empty( $tag['name'] ) ) {
@@ -89,7 +99,7 @@ class WPCF7_Submission {
 			$pipes = $tag['pipes'];
 
 			if ( WPCF7_USE_PIPE
-			&& is_a( $pipes, 'WPCF7_Pipes' )
+			&& $pipes instanceof WPCF7_Pipes
 			&& ! $pipes->zero() ) {
 				if ( is_array( $value) ) {
 					$new_value = array();
@@ -112,20 +122,33 @@ class WPCF7_Submission {
 		return $this->posted_data;
 	}
 
+	private function sanitize_posted_data( $value ) {
+		if ( is_array( $value ) ) {
+			$value = array_map( array( $this, 'sanitize_posted_data' ), $value );
+		} elseif ( is_string( $value ) ) {
+			$value = wp_check_invalid_utf8( $value );
+			$value = wp_kses_no_null( $value );
+		}
+
+		return $value;
+	}
+
 	private function submit() {
 		if ( ! $this->is( 'init' ) ) {
 			return $this->status;
 		}
 
 		$this->meta = array(
-			'remote_ip' => preg_replace( '/[^0-9a-f.:, ]/', '',
-				$_SERVER['REMOTE_ADDR'] ),
-			'user_agent' => substr( $_SERVER['HTTP_USER_AGENT'], 0, 254 ),
-			'url' => preg_replace( '%(?<!:|/)/.*$%', '',
-				untrailingslashit( home_url() ) ) . wpcf7_get_request_uri(),
+			'remote_ip' => $this->get_remote_ip_addr(),
+			'user_agent' => isset( $_SERVER['HTTP_USER_AGENT'] )
+				? substr( $_SERVER['HTTP_USER_AGENT'], 0, 254 ) : '',
+			'url' => $this->get_request_url(),
 			'timestamp' => current_time( 'timestamp' ),
-			'unit_tag' => isset( $_POST['_wpcf7_unit_tag'] )
-				? $_POST['_wpcf7_unit_tag'] : '' );
+			'unit_tag' =>
+				isset( $_POST['_wpcf7_unit_tag'] ) ? $_POST['_wpcf7_unit_tag'] : '',
+			'container_post_id' => isset( $_POST['_wpcf7_container_post'] )
+				? (int) $_POST['_wpcf7_container_post'] : 0,
+		);
 
 		$contact_form = $this->contact_form;
 
@@ -159,43 +182,55 @@ class WPCF7_Submission {
 		return $this->status;
 	}
 
+	private function get_remote_ip_addr() {
+		$ip_addr = '';
+
+		if ( isset( $_SERVER['REMOTE_ADDR'] )
+		&& WP_Http::is_ip_address( $_SERVER['REMOTE_ADDR'] ) ) {
+			$ip_addr = $_SERVER['REMOTE_ADDR'];
+		}
+
+		return apply_filters( 'wpcf7_remote_ip_addr', $ip_addr );
+	}
+
+	private function get_request_url() {
+		$home_url = untrailingslashit( home_url() );
+
+		if ( self::is_restful() ) {
+			$referer = isset( $_SERVER['HTTP_REFERER'] )
+				? trim( $_SERVER['HTTP_REFERER'] ) : '';
+
+			if ( $referer && 0 === strpos( $referer, $home_url ) ) {
+				return esc_url_raw( $referer );
+			}
+		}
+
+		$url = preg_replace( '%(?<!:|/)/.*$%', '', $home_url )
+			. wpcf7_get_request_uri();
+
+		return $url;
+	}
+
 	private function validate() {
 		if ( $this->invalid_fields ) {
 			return false;
 		}
 
-		$result = array(
-			'valid' => true,
-			'reason' => array(),
-			'idref' => array() );
+		require_once WPCF7_PLUGIN_DIR . '/includes/validation.php';
+		$result = new WPCF7_Validation();
 
-		$tags = $this->contact_form->form_scan_shortcode();
+		$tags = $this->contact_form->scan_form_tags();
 
 		foreach ( $tags as $tag ) {
-			$result = apply_filters( 'wpcf7_validate_' . $tag['type'],
-				$result, $tag );
+			$type = $tag['type'];
+			$result = apply_filters( "wpcf7_validate_{$type}", $result, $tag );
 		}
 
-		$result = apply_filters( 'wpcf7_validate', $result );
+		$result = apply_filters( 'wpcf7_validate', $result, $tags );
 
-		if ( $result['valid'] ) {
-			return true;
-		} else {
-			foreach ( (array) $result['reason'] as $name => $reason ) {
-				$field = array( 'reason' => $reason );
+		$this->invalid_fields = $result->get_invalid_fields();
 
-				if ( isset( $result['idref'][$name] )
-				&& wpcf7_is_name( $result['idref'][$name] ) ) {
-					$field['idref'] = $result['idref'][$name];
-				} else {
-					$field['idref'] = null;
-				}
-
-				$this->invalid_fields[$name] = $field;
-			}
-
-			return false;
-		}
+		return $result->is_valid();
 	}
 
 	private function accepted() {
@@ -205,17 +240,22 @@ class WPCF7_Submission {
 	private function spam() {
 		$spam = false;
 
+		if ( $this->contact_form->is_true( 'subscribers_only' )
+		&& current_user_can( 'wpcf7_submit', $this->contact_form->id() ) ) {
+			return $spam;
+		}
+
 		$user_agent = (string) $this->get_meta( 'user_agent' );
 
 		if ( strlen( $user_agent ) < 2 ) {
 			$spam = true;
 		}
 
-		if ( WPCF7_VERIFY_NONCE && ! $this->verify_nonce() ) {
+		if ( ! $this->verify_nonce() ) {
 			$spam = true;
 		}
 
-		if ( $this->blacklist_check() ) {
+		if ( $this->is_blacklisted() ) {
 			$spam = true;
 		}
 
@@ -223,17 +263,21 @@ class WPCF7_Submission {
 	}
 
 	private function verify_nonce() {
-		return wpcf7_verify_nonce( $_POST['_wpnonce'], $this->contact_form->id() );
+		if ( ! $this->contact_form->nonce_is_active() ) {
+			return true;
+		}
+
+		return wpcf7_verify_nonce( $_POST['_wpnonce'] );
 	}
 
-	private function blacklist_check() {
+	private function is_blacklisted() {
 		$target = wpcf7_array_flatten( $this->posted_data );
 		$target[] = $this->get_meta( 'remote_ip' );
 		$target[] = $this->get_meta( 'user_agent' );
-
 		$target = implode( "\n", $target );
 
-		return wpcf7_blacklist_check( $target );
+		return (bool) apply_filters( 'wpcf7_submission_is_blacklisted',
+			wpcf7_blacklist_check( $target ), $this );
 	}
 
 	/* Mail */
@@ -243,8 +287,7 @@ class WPCF7_Submission {
 
 		do_action( 'wpcf7_before_send_mail', $contact_form );
 
-		$skip_mail = $this->skip_mail || ! empty( $contact_form->skip_mail );
-		$skip_mail = apply_filters( 'wpcf7_skip_mail', $skip_mail, $contact_form );
+		$skip_mail = apply_filters( 'wpcf7_skip_mail', $this->skip_mail, $contact_form );
 
 		if ( $skip_mail ) {
 			return true;
@@ -286,7 +329,7 @@ class WPCF7_Submission {
 
 	public function remove_uploaded_files() {
 		foreach ( (array) $this->uploaded_files as $name => $path ) {
-			@unlink( $path );
+			wpcf7_rmdir_p( $path );
 			@rmdir( dirname( $path ) ); // remove parent dir if it's removable (empty).
 		}
 	}
@@ -297,5 +340,3 @@ class WPCF7_Submission {
 		}
 	}
 }
-
-?>

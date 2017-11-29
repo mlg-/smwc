@@ -15,7 +15,7 @@ get_header(); ?>
 					echo do_shortcode( '[wonderplugin_slider id="1"]' ); 
 				}
 					else{ 
-					  echo do_shortcode( '[masterslider_pb  id="1"]' ); 
+					  echo do_shortcode( '[masterslider id="1"]' ); 
 					 } ?>
 			</div>
 

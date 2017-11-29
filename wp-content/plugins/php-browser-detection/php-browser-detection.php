@@ -3,20 +3,18 @@
 Plugin Name: PHP Browser Detection
 Plugin URI: http://wordpress.org/extend/plugins/php-browser-detection/
 Description: Use PHP to detect browsers for conditional CSS or to detect mobile phones.
-Version: 3.1.2
+Version: 3.1.8
 Author: Mindshare Studios, Inc.
-Author URI: http://mind.sh/are
+Author URI: https://mind.sh/are
 License: GNU General Public License v3
 License URI: LICENSE
 Text Domain: php-browser-detection
 */
 
 /**
- *
- * Copyright 2009-2014 Mindshare Studios, Inc. / Marty Thornley / Garet Jax
- *
+ * Copyright 2009-2015 Mindshare Studios, Inc.
  * Based on code originally by Marty Thornley
- * Since version 3 making use of the BROWSCAP-PHP library by Garet Jax
+ * Since version 3 making use of the BROWSCAP-PHP library by Garet Jax / asgrim
  *
  * @link https://github.com/browscap/browscap-php
  *
@@ -35,26 +33,50 @@ Text Domain: php-browser-detection
  *
  */
 
-if(!defined('PBD_DIR_PATH')) {
+// TODO refactor into class using object oriented code, filters aren't currently working
+
+if (!defined('PBD_DIR_PATH')) {
 	define('PBD_DIR_PATH', plugin_dir_path(__FILE__)); // /.../wp-content/plugins/php-browser-detection/
 }
 
-require_once('inc/admin.php');
+/**
+ * Global variable with browser information.
+ *
+ * @global
+ */
+$browser_info = array();
 
+/**
+ * PHP Browser Detection initialization
+ *
+ * @private
+ */
+
+require_once('inc/admin.php');
 require_once('lib/Browscap.php');
-$browscap = new \phpbrowscap\Browscap(PBD_DIR_PATH.'cache');
+
+$browser_info = php_browser_info();
 
 require_once('inc/deprecated.php');
+include_once('inc/shortcodes.php');
 
 /**
  * Returns array of all browser info.
  *
- * @usage $browser_info = php_browser_info();
+ * @usage global $browser_info;
  *
  * @return array
  */
 function php_browser_info() {
-	global $browscap;
+
+	$browscap = new \phpbrowscap\Browscap(apply_filters('php_browser_detection_cache_dir', PBD_DIR_PATH . 'cache'));
+	$browscap->doAutoUpdate = apply_filters('php_browser_detection_autoupdate', TRUE);
+	$browscap->updateInterval = apply_filters('php_browser_detection_cache_time', 2592000);  // 30 days, default is 5
+	$browscap->remoteIniUrl = apply_filters('php_browser_detection_version', "http://browscap.org/stream?q=Lite_PHP_BrowsCapINI");
+
+	//	die(var_export($browscap->remoteIniUrl));
+	//	die(var_export($browscap->getBrowser(NULL, TRUE)));
+
 	return $browscap->getBrowser(NULL, TRUE);
 }
 
@@ -64,18 +86,19 @@ function php_browser_info() {
  * @return string
  */
 function get_browser_name() {
-	$browser_info = php_browser_info();
+	global $browser_info;
+
 	return $browser_info['Browser'];
 }
 
 /**
- *
  * Returns the browser version number.
  *
  * @return mixed
  */
 function get_browser_version() {
-	$browser_info = php_browser_info();
+	global $browser_info;
+
 	return $browser_info['Version'];
 }
 
@@ -88,11 +111,18 @@ function get_browser_version() {
  * @return bool
  */
 function is_browser($name = '', $version = '') {
-	$browser_info = php_browser_info();
-	if(isset($browser_info['Browser']) && (strpos($browser_info['Browser'], $name) !== FALSE)) {
-		if($version == '') {
+	global $browser_info;
+
+	$name = ucwords(trim($name));
+
+	if (isset($browser_info['Browser']) && (strpos($browser_info['Browser'], $name) !== FALSE)) {
+		if ($version == '') {
 			return TRUE;
-		} elseif($browser_info['MajorVer'] == $version) {
+			// check MajorVer from full browscap first
+		} elseif (isset($browser_info['MajorVer']) && $browser_info['MajorVer'] == $version) {
+			return TRUE;
+			// fallback to Version in lite version
+		} elseif (isset($browser_info['Version']) && $browser_info['Version'] == $version) {
 			return TRUE;
 		} else {
 			return FALSE;
@@ -103,7 +133,6 @@ function is_browser($name = '', $version = '') {
 }
 
 /**
- *
  * Conditional to test for Firefox.
  *
  * @param string $version
@@ -115,7 +144,6 @@ function is_firefox($version = '') {
 }
 
 /**
- *
  * Conditional to test for Safari.
  *
  * @param string $version
@@ -165,17 +193,18 @@ function is_ie($version = '') {
  * @return bool
  */
 function is_desktop() {
-	$browser_info = php_browser_info();
+	global $browser_info;
 
 	// later than 3.1.1 version
-	if(!is_tablet() && !is_mobile()) {
+	if (!is_tablet() && !is_mobile()) {
 		return TRUE;
 	}
 
 	// pre 3.1 version
-	if(isset($browser_info['Device_Type']) && strpos($browser_info['Device_Type'], "Desktop") !== FALSE) {
+	if (isset($browser_info['Device_Type']) && strpos($browser_info['Device_Type'], "Desktop") !== FALSE) {
 		return TRUE;
 	}
+
 	return FALSE;
 }
 
@@ -185,12 +214,13 @@ function is_desktop() {
  * @return bool
  */
 function is_tablet() {
-	$browser_info = php_browser_info();
-	if(isset($browser_info['isTablet'])) {
-		if($browser_info['isTablet'] == 1 || $browser_info['isTablet'] == "true" || isset($browser_info['Device_Type']) && strpos($browser_info['Device_Type'], "Tablet") !== FALSE) {
+	global $browser_info;
+	if (isset($browser_info['isTablet'])) {
+		if ($browser_info['isTablet'] == 1 || $browser_info['isTablet'] == "true" || isset($browser_info['Device_Type']) && strpos($browser_info['Device_Type'], "Tablet") !== FALSE) {
 			return TRUE;
 		}
 	}
+
 	return FALSE;
 }
 
@@ -200,12 +230,13 @@ function is_tablet() {
  * @return bool
  */
 function is_mobile() {
-	$browser_info = php_browser_info();
-	if(isset($browser_info['isMobileDevice'])) {
-		if($browser_info['isMobileDevice'] == 1 || $browser_info['isMobileDevice'] == "true" || isset($browser_info['Device_Type']) &&  strpos($browser_info['Device_Type'], "Mobile") !== FALSE) {
+	global $browser_info;
+	if (isset($browser_info['isMobileDevice'])) {
+		if ($browser_info['isMobileDevice'] == 1 || $browser_info['isMobileDevice'] == "true" || isset($browser_info['Device_Type']) && strpos($browser_info['Device_Type'], "Mobile") !== FALSE) {
 			return TRUE;
 		}
 	}
+
 	return FALSE;
 }
 
@@ -217,11 +248,11 @@ function is_mobile() {
  * @return bool
  */
 function is_iphone($version = '') {
-	$browser_info = php_browser_info();
-	if((isset($browser_info['Browser']) && $browser_info['Browser'] == 'iPhone') || strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone')) {
-		if($version == '') {
+	global $browser_info;
+	if ((isset($browser_info['Browser']) && $browser_info['Browser'] == 'iPhone') || strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone')) {
+		if ($version == '') {
 			return TRUE;
-		} elseif($browser_info['MajorVer'] == $version) {
+		} elseif ($browser_info['MajorVer'] == $version) {
 			return TRUE;
 		} else {
 			return FALSE;
@@ -239,11 +270,11 @@ function is_iphone($version = '') {
  * @return bool
  */
 function is_ipad($version = '') {
-	$browser_info = php_browser_info();
-	if(preg_match("/iPad/", $browser_info['browser_name_pattern'], $matches) || strpos($_SERVER['HTTP_USER_AGENT'], 'iPad')) {
-		if($version == '') {
+	global $browser_info;
+	if (preg_match("/iPad/", $browser_info['browser_name_pattern'], $matches) || strpos($_SERVER['HTTP_USER_AGENT'], 'iPad')) {
+		if ($version == '') {
 			return TRUE;
-		} elseif($browser_info['MajorVer'] == $version) {
+		} elseif ($browser_info['MajorVer'] == $version) {
 			return TRUE;
 		} else {
 			return FALSE;
@@ -261,11 +292,11 @@ function is_ipad($version = '') {
  * @return bool
  */
 function is_ipod($version = '') {
-	$browser_info = php_browser_info();
-	if(preg_match("/iPod/", $browser_info['browser_name_pattern'], $matches)) {
-		if($version == '') {
+	global $browser_info;
+	if (preg_match("/iPod/", $browser_info['browser_name_pattern'], $matches)) {
+		if ($version == '') {
 			return TRUE;
-		} elseif($browser_info['MajorVer'] == $version) {
+		} elseif ($browser_info['MajorVer'] == $version) {
 			return TRUE;
 		} else {
 			return FALSE;
@@ -281,12 +312,13 @@ function is_ipod($version = '') {
  * @return bool
  */
 function browser_supports_javascript() {
-	$browser_info = php_browser_info();
-	if(isset($browser_info['JavaScript'])) {
-		if($browser_info['JavaScript'] == 1 || $browser_info['JavaScript'] == "true") {
+	global $browser_info;
+	if (isset($browser_info['JavaScript'])) {
+		if ($browser_info['JavaScript'] == 1 || $browser_info['JavaScript'] == "true") {
 			return TRUE;
 		}
 	}
+
 	return FALSE;
 }
 
@@ -296,12 +328,13 @@ function browser_supports_javascript() {
  * @return bool
  */
 function browser_supports_cookies() {
-	$browser_info = php_browser_info();
-	if(isset($browser_info['Cookies'])) {
-		if($browser_info['Cookies'] == 1 || $browser_info['Cookies'] == "true") {
+	global $browser_info;
+	if (isset($browser_info['Cookies'])) {
+		if ($browser_info['Cookies'] == 1 || $browser_info['Cookies'] == "true") {
 			return TRUE;
 		}
 	}
+
 	return FALSE;
 }
 
@@ -311,18 +344,18 @@ function browser_supports_cookies() {
  * @return bool
  */
 function browser_supports_css() {
-	$browser_info = php_browser_info();
-	if(isset($browser_info['CssVersion'])) {
-		if($browser_info['CssVersion'] >= 1) {
+	global $browser_info;
+	if (isset($browser_info['CssVersion'])) {
+		if ($browser_info['CssVersion'] >= 1) {
 			return TRUE;
 		}
 	}
+
 	return FALSE;
 }
 
 /**
  * Evaluates natural language strings to boolean equivalent
- *
  * All values defined as TRUE will return TRUE, anything else is FALSE.
  * Boolean values will be passed through.
  *
@@ -334,11 +367,12 @@ function browser_supports_css() {
  * @return boolean The boolean value of the provided text
  **/
 function pbd_is_true($string, $true_synonyms = array('yes', 'y', 'true', '1', 'on', 'open', 'affirmative', '+', 'positive')) {
-	if(is_array($string)) {
+	if (is_array($string)) {
 		return FALSE;
 	}
-	if(is_bool($string)) {
+	if (is_bool($string)) {
 		return $string;
 	}
+
 	return in_array(strtolower(trim($string)), $true_synonyms);
 }

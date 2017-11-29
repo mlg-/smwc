@@ -12,15 +12,30 @@
  * 
  */
 include_once('../../../../wp-blog-header.php');
-$q = new WP_Query('page_id=2');
+/*
+function browser_detection_version($version) {
+	$version = 'http://browscap.org/stream?q=PHP_BrowsCapINI';
+	return $version;
+}
+
+add_filter('php_browser_detection_version', 'browser_detection_version');*/
+
+if (array_key_exists('test-id', $_GET) && isset($_GET['test-id'])) {
+	$id = $_GET['test-id'];
+} else {
+	$id = 2;
+}
+$q = new WP_Query('page_id=' . $id);
+
 get_header();
+
 ?>
 <div id="main" class="site-main">
 	<div id="main-content" class="main-content">
 		<div id="primary" class="content-area">
 			<div id="content" class="site-content" role="main">
-				<?php if($q->have_posts()) : ?>
-					<?php while($q->have_posts()) : $q->the_post(); ?>
+				<?php if ($q->have_posts()) : ?>
+					<?php while ($q->have_posts()) : $q->the_post(); ?>
 
 						<h1>PHP Browser Detection Tests<?php //the_title(); ?></h1>
 
@@ -86,7 +101,6 @@ get_header();
 							echo is_desktop();
 							echo '</pre>';
 
-
 							echo '<pre>is_tablet() = ';
 							echo is_tablet();
 							echo '</pre>';
@@ -132,13 +146,13 @@ get_header();
 							<p>Test for higher or lower versions of a browser:</p>
 							<?php
 							echo '<pre>if(is_ie() && get_browser_version() < 10) = ';
-							if(is_ie() && get_browser_version() < 10) {
+							if (is_ie() && get_browser_version() < 10) {
 								echo TRUE;
 							};
 							echo '</pre>';
 
 							echo '<pre>if(is_firefox() && get_browser_version() >= 19) = ';
-							if(is_firefox() && get_browser_version() >= 19) {
+							if (is_firefox() && get_browser_version() >= 19) {
 								echo TRUE;
 							};
 							?>
@@ -148,23 +162,41 @@ get_header();
 							<p>Test for specific versions of a browser:</p>
 							<?php
 							echo '<pre>if(is_ie(11)) = ';
-							if(is_ie(11)) {
+							if (is_ie(11)) {
 								echo TRUE;
 							};
 							echo '</pre>';
 
 							echo '<pre>if(is_firefox(35)) = ';
-							if(is_firefox(35)) {
+							if (is_firefox(35)) {
 								echo TRUE;
 							};
 							echo '</pre>';
 
-							echo '<pre>if(is_chrome(37)) = ';
-							if(is_chrome(37)) {
+							echo '<pre>if(is_chrome(44)) = ';
+							if (is_chrome(44)) {
 								echo TRUE;
 							};
 							echo '</pre>';
 							?>
+						</div>
+
+						<div style="padding:5px; margin:10px 0; border-radius:5px; background:#E6E6E6">
+							<p>Shortcodes:</p>
+
+							<div class="post"><p>I've implemented 2 basic shortcodes, if you care to test the new version:
+									<a href="https://github.com/mindsharestudios/php-browser-detection/archive/master.zip" rel="nofollow">https://github.com/mindsharestudios/php-browser-detection/archive/master.zip</a></p>
+								<p>Show content to specific browsers:<br>
+								</p><pre><code>[is_browser name="chrome" version="45"]
+											   &lt;p&gt;You are using Chrome 45 or above.&lt;/p&gt;
+											   [/is_browser]</code></pre>
+								<?php echo do_shortcode('[is_browser name="chrome" version="45"]<strong>You are using Chrome 45 or above.</strong>[/is_browser]'); ?>
+								<hr />
+								<p>Output all browser info:<br></p>
+								<pre><code>[browser_info]</code></pre>
+								<?php echo do_shortcode('[browser_info]'); ?>
+							</div>
+
 						</div>
 
 					<?php endwhile; endif; ?>
