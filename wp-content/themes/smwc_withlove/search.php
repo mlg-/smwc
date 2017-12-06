@@ -9,7 +9,7 @@ get_header(); ?>
 
 <div class="background-container">
 
-	<div class="page-container">
+	<div class="page-container search-page-container">
 
 		<div class="search-page" role="main">
 
